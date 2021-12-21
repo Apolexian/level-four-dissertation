@@ -1,6 +1,6 @@
 \section{The evolution of the transport layer}
 
-In the following section we provide a background on transport layer protocols applicable to the body of work conducted.
+In the following section we provide a background on transport layer protocols and recent advancements in the space applicable to the body of work conducted.
 Together, the protocols described comprise most of the traffic on the Internet.
 Hence, smaller use-case protocols that do exist were not seen as applicable.
 
@@ -207,4 +207,4 @@ A comparison of the handshakes can be seen in Figure \ref{fig:handshakes_compari
 TLS is still used to secure QUIC as described by~\citet{thomson_using_2021} unless a different cryptographic protocol is specified.
 The initial QUIC handshake keeps the same handshake messages as TLS, however it uses its own framing format, replacing the TLS record layer.
 This ensures that the connection is always authenticated and encrypted, unlike in TLS where the initial handshake is still vulnerable.
-The combination also means that QUIC typically starts sending data after just one round-trip.
+The combination also means that QUIC typically starts sending data after just one round-trip achieving security by default and lower latency.
