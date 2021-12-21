@@ -1,0 +1,210 @@
+\section{The evolution of the transport layer}
+
+In the following section we provide a background on transport layer protocols applicable to the body of work conducted.
+Together, the protocols described comprise most of the traffic on the Internet.
+Hence, smaller use-case protocols that do exist were not seen as applicable.
+
+First described by~\citet{cerf_protocol_1974}, the Transmission Control Protocol (TCP) has been the main protocol of the Internet suite since its initial implementation.
+TCP provides a \textit{reliable} and \textit{ordered} delivery of bytes.
+That is, TCP ensures that data is not lost, altered or duplicated and is delivered in the same order that it was sent.
+This is achieved by assigning a sequence number to each transmitted packet and requiring an \textit{acknowledgment} (commonly referred to as ACK) from the receiving side.
+If an ACK is not received, the data is re-transmitted.
+On the receiving side, the sequence numbers can also be used to order packets as intended by the sender.
+
+As TCP is a connection based protocol, connection establishment must take place before any data can be transmitted.
+The receiving side (the server) must bind to and listen on a network port and the sender (the client) must initiate the connection using the process of a \textit{three-way handshake} as shown in Figure \ref{fig:tcp}.
+In the first step of the handshake, the client sends a segment with a \textit{synchronise sequence number} (SYN) that indicates the start of the communication and the sequence number that the segment starts with.
+The server responds with an acknowledgment - ACK, and the sequence number it will start its segment with - SYN.
+Hence, this step is often referred to as the SYN-ACK.
+In the third and final step, the client must acknowledge the response.
+At this point, the connection on which data can be transferred is established.
+
+\begin{figure}[ht]
+    \begin{center}
+        \begin{tikzpicture}[>=latex]
+            \coordinate (A) at (2,8);
+            \coordinate (B) at (2,0);
+            \coordinate (C) at (8,8);
+            \coordinate (D) at (8,0);
+            \draw[thick] (A)--(B) (C)--(D);
+            \draw (A) node[above]{\Large Sender};
+            \draw (C) node[above]{\Large Receiver};
+
+            \coordinate (E) at ($(A)!.1!(B)$);
+            \draw (E) node[left]{\begin{tabular}{r}
+                \end{tabular}};
+
+            \coordinate (F) at ($(C)!.3!(D)$);
+            \draw (F) node[right]{\begin{tabular}{l}
+                \end{tabular}};
+            \draw[->] (E) -- (F) node[midway,sloped,above]{\verb$SYN=1, ACK=0$};
+
+            \coordinate (G) at ($(A)!.5!(B)$);
+            \draw (G) node[left]{};
+            \draw[->] (F) -- (G) node[midway,sloped,above]{\verb$SYN=1, ACK=1$};
+
+            \coordinate (H) at ($(A)!.5!(B)$);
+            \draw (H) node[right]{};
+
+            \coordinate (I) at ($(C)!.7!(D)$);
+            \draw (I) node[left]{};
+            \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$SYN=0,ACK=1$};
+        \end{tikzpicture}
+        \caption{The TCP handshake needed for connection establishment. The values of the SYN and ACK fields being set indicate the kind of segment sent. For example, for the SYN-ACK stage both the SYN and ACK fields are set.}
+        \label{fig:tcp}
+    \end{center}
+\end{figure}
+
+In order to achieve \textit{secure communication}, TLS~\citep{rescorla_transport_2018} is often used in the TCP stack.
+In order to do this a separate TLS handshake has to occur in order to specify the version of TLS to use, decide on the cipher suites, authenticate the server via its public key and certificate authority's signature, and generate a session key that can be used for symmetric encryption during communication.
+In the TLS handshake the first step is for the client to send a $ClientHello$ message that specifies the highest version of TLS that the client supports, a list of suggested cipher suites, compression methods and a random number.
+The server responds with a $ServerHello$ message that contains the selected TLS version, cipher suite, compression method and its own random number.
+The server then sends its certificate and $ServerKeyExchange$ message along with the $ServerHelloDone$ message indicating that it has completed its part of the negotiation process.
+The client will respond with the $ClientKeyExchange$ message (CKE) which, depending on the chosen cipher suite, may contain a public key.
+This is followed by the client sending a $ChangeCipherSpec$ message indicating that all communication from this point is authenticated and encrypted along with a finished message.
+The server responds with the same message and the TLS connection is established.
+
+Due to the establishment of communication and properties guaranteed by TCP, such as reliability through retransmission, an inherent trade-off is created, and latency is lengthened.
+Hence, in use-cases where reliability and connection state is not required, the User Datagram Protocol (UDP)~\citep{j_postel_1980} is preferred.
+UDP uses a connectionless communication model that aims to have a minimal number of semantics. The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
+This is preferable for real-time systems as using TCP for these would cause an overhead to latency and retransmission of packets that are no longer needed by the application.
+
+QUIC is a relatively new general-purpose transport layer protocol originally designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine.
+In 2015 the first draft of the QUIC protocol was submitted to the IETF and was later standardised~\citep{iyengar_quic_2021}.
+
+The aim of QUIC is to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing, which is a method of combining several signals or channels of communication over one shared medium.
+QUIC establishes multiplexed connections between the communicating endpoints using UDP.
+
+
+
+QUIC facilitates data exchange on the UDP connection through the concept of \textit{streams}.
+Streams are an ordered byte-stream abstraction used by the application to send data of any length.
+Streams are created by either the sending or receiving side and can be both unidirectional and bidirectional.
+Each side can send data concurrently on the stream and can open any number of streams (specifically, a field for the maximum number of streams is set during the connection).
+Hence, subject to the constraints imposed by flow control, QUIC allows an arbitrary number of streams to send arbitrary amounts of data on the UDP connection.
+
+By doing so, QUIC also achieves secondary goal of lifting congestion control algorithms from the kernel space to the user space.
+Hence, congestion control algorithms can evolve without having to be tied down to kernel level semantics and constraints.
+
+\begin{figure}[ht]
+    \begin{center}
+        \begin{subfigure}[b]{0.45\textwidth}
+            \begin{tikzpicture}[>=latex]
+                \coordinate (A) at (2,10);
+                \coordinate (B) at (2,0);
+                \coordinate (C) at (7,10);
+                \coordinate (D) at (7,0);
+                \draw[thick] (A)--(B) (C)--(D);
+                \draw (A) node[above]{Sender};
+                \draw (C) node[above]{Receiver};
+
+                \coordinate (H) at ($(A)!.1!(B)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(C)!.1!(D)$);
+                \draw (I) node[left]{};
+                \draw[densely dotted] (H) -- (I) node[midway,sloped,above]{\verb$TCP Handshake$};
+
+                \coordinate (H) at ($(A)!.2!(B)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(C)!.3!(D)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$Client Hello$};
+
+                \coordinate (H) at ($(C)!.3!(D)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(A)!.4!(B)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$Server Hello$};
+
+                \coordinate (H) at ($(C)!.4!(D)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(A)!.5!(B)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$Certificate$};
+
+                \coordinate (H) at ($(C)!.5!(D)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(A)!.6!(B)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$ServerHelloDone$};
+
+                \coordinate (H) at ($(A)!.6!(B)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(C)!.7!(D)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$CKE$};
+
+                \coordinate (H) at ($(A)!.7!(B)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(C)!.8!(D)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$CCSF$};
+
+                \coordinate (H) at ($(C)!.8!(D)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(A)!.85!(B)$);
+                \draw (I) node[left]{};
+                \draw[->] (H) -- (I) node[midway,sloped,above]{\verb$CCSF$};
+
+                \coordinate (H) at ($(A)!.9!(B)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(C)!.9!(D)$);
+                \draw (I) node[left]{};
+                \draw[densely dotted] (H) -- (I) node[midway,sloped,above]{\verb$Established$};
+            \end{tikzpicture}
+            \caption{TCP/TLS}
+            \label{fig:handshakes:tls}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+            \begin{tikzpicture}[>=latex]
+                \coordinate (A) at (2,10);
+                \coordinate (B) at (2,0);
+                \coordinate (C) at (7,10);
+                \coordinate (D) at (7,0);
+                \draw[thick] (A)--(B) (C)--(D);
+                \draw (A) node[above]{Sender};
+                \draw (C) node[above]{Receiver};
+
+                \coordinate (E) at ($(A)!.1!(B)$);
+                \draw (E) node[left]{\begin{tabular}{r}
+                    \end{tabular}};
+
+                \coordinate (F) at ($(C)!.3!(D)$);
+                \draw (F) node[right]{\begin{tabular}{l}
+                    \end{tabular}};
+                \draw[->] (E) -- (F) node[midway,sloped,above]{\verb$Init, Hello$};
+
+                \coordinate (G) at ($(A)!.5!(B)$);
+                \draw (G) node[left]{};
+                \draw[->] (F) -- (G) node[midway,sloped,above]{\verb$Init, Hello, Cert, Fin$};
+
+                \coordinate (H) at ($(A)!.55!(B)$);
+                \draw (H) node[right]{};
+
+                \coordinate (I) at ($(C)!.55!(D)$);
+                \draw (I) node[left]{};
+                \draw[densely dotted] (H) -- (I) node[midway,sloped,above]{\verb$Established$};
+            \end{tikzpicture}
+            \caption{QUIC}
+            \label{fig:handshakes:quic}
+        \end{subfigure}
+        \caption{Handshakes required to establish secure data transmission in the TCP/TLS stack \subref{fig:handshakes:tls} and the QUIC stack \subref{fig:handshakes:quic}. In the case of TCP/TLS we can see that the handshake is substantially more complex and that the TLS handshake requires the full TCP handshake before it can proceed. In both cases these handshakes can be made quicker. In the case of TLS, version 1.3 allows for one less round trip before data can be sent, and in the case of QUIC 0-RTT connection re-establishment may be used in come cases, allowing to send data in the first packet.}
+        \label{fig:handshakes_comparison}
+    \end{center}
+\end{figure}
+
+Compared to TCP/TLS, QUIC combines the transport and cryptographic handshakes in order to minimise the time needed for connection establishment.
+A comparison of the handshakes can be seen in Figure \ref{fig:handshakes_comparison}.
+TLS is still used to secure QUIC as described by~\citet{thomson_using_2021} unless a different cryptographic protocol is specified.
+The initial QUIC handshake keeps the same handshake messages as TLS, however it uses its own framing format, replacing the TLS record layer.
+This ensures that the connection is always authenticated and encrypted, unlike in TLS where the initial handshake is still vulnerable.
+The combination also means that QUIC typically starts sending data after just one round-trip.
