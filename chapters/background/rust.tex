@@ -1,1 +1,41 @@
 \section{The Rust programming language}
+
+Rust is a programming language is a modern systems programming language originally created at Mozilla designed to be a highly safe and performant.
+It is a systems language that aims to maintain the performance that we expect from languages like C, while also using a unique \textit{ownership} systems in order to maintain memory safety.
+Instead of garbage collection Rust opts for a system managed through the resource acquisition is initialisation (RAII) principle~\citep{rust_raii_2021}.
+All values have a unique owner and their scope is also tied to this owner.
+Hence, by design, Rust does not allow dangling pointers, null pointers and data races as the compiler will not allow for unsafe code to be compiled, without circumventing it using the $unsafe$ keyword.
+
+For example, consider the program written in C in Listing~\ref{lst:C} compared to a similar application in Rust in~\ref{lst:Rust}.
+The C program demonstrates a use after free bug.
+That is, the pointer is freed and then used in the print statement, resulting in undefined behaviour.
+While this example is fairly trivial, in a larger, more complex system these bugs are often very hard to debug and lead to security vulnerabilities.
+This issue does not only exist in code bases and organisations with low resources, at the BlueHat security conference, Microsoft researcher~\cite{miller_msrc-security-research2019_02_2019} presented that roughly 70\% of all Microsoft's yearly patches were targeted at fixing memory safety bugs.
+On the other hand, the analogous Rust code will not compile due to the ownership system, mitigating this issue all together.
+
+\begin{lstlisting}[language=C, float, caption={An example of a use after free in C code. This is an incorrect use of dynamic memory management, however it compiles. In large, complex code bases, missing bugs such as these often happens and can cause exploitable security issues.}, label=lst:C]
+    void bar() {
+        int *ptr = (Point *) malloc(sizeof(int));
+        free (ptr);
+        printf("%d", *ptr); // obvious use after free, however this will compile
+    }
+\end{lstlisting}
+
+\begin{lstlisting}[language=Rust, float, caption={A similar application in Rust will not compile due to the safety guaranteed by the ownership system. A borrow occurs when $example\_ref$ is assigned to point to $new\_example$, however the ownership system recognises that the borrowed value does not live long enough.}, label=lst:Rust]
+    fn bar() {
+        let example = String::from("Example");
+        let mut example_ref = &example;
+        {
+            let new_example = String::from("New Example");
+            example_ref = &new_example;
+        }
+        println!("our string is {}", &example_ref); // causes a compiler error in Rust: error `new_example` does not live long enough
+    }
+\end{lstlisting}
+
+Additionally, due to the focus on concurrency and safe systems programming, Rust has a natural use in networked systems.
+However, while Rust aims to be as fast as traditional systems languages, this remains to be seen with even the language's developers saying that the matter of performance is hard to assess~\cite{rust_faq_2021}. Therefore, the interest towards Rust in this project comes from two main aspects.
+Firstly, a memory safe language may circumvent the issues with security related bugs in IoT firmware and the supporting network stacks.
+As previously discussed, getting the firmware correct on the first try is important in IoT due to the difficulty that comes with updates.
+Secondly, assessing the performance of Rust implementations of the QUIC stack is important to solidify Rust as a performant systems programming language.
+If the binary sizes produced by the Rust implementations are larger than their C equivalents or if the code is not as performant, then the memory safety guarantees would not matter.
