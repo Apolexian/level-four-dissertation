@@ -229,3 +229,16 @@
   keywords  = {Fault tolerance, Fault tolerant systems, Interference, Protocols, Wireless communication, Wireless sensor networks, Zigbee},
   pages     = {1--15}
 }
+
+@article{kumar_implementation_2019,
+  title    = {Implementation and {Analysis} of {QUIC} for {MQTT}},
+  url      = {http://arxiv.org/abs/1810.07730},
+  abstract = {Transport and security protocols are essential to ensure reliable and secure communication between two parties. For IoT applications, these protocols must be lightweight, since IoT devices are usually resource constrained. Unfortunately, the existing transport and security protocols -- namely TCP/TLS and UDP/DTLS -- fall short in terms of connection overhead, latency, and connection migration when used in IoT applications. In this paper, after studying the root causes of these shortcomings, we show how utilizing QUIC in IoT scenarios results in a higher performance. Based on these observations, and given the popularity of MQTT as an IoT application layer protocol, we integrate MQTT with QUIC. By presenting the main APIs and functions developed, we explain how connection establishment and message exchange functionalities work. We evaluate the performance of MQTTw/QUIC versus MQTTw/TCP using wired, wireless, and long-distance testbeds. Our results show that MQTTw/QUIC reduces connection overhead in terms of the number of packets exchanged with the broker by up to 56\%. In addition, by eliminating half-open connections, MQTTw/QUIC reduces processor and memory usage by up to 83\% and 50\%, respectively. Furthermore, by removing the head-of-line blocking problem, delivery latency is reduced by up to 55\%. We also show that the throughput drops experienced by MQTTw/QUIC when a connection migration happens is considerably lower than that of MQTTw/TCP.},
+  urldate  = {2021-09-22},
+  journal  = {arXiv:1810.07730 [cs]},
+  author   = {Kumar, Puneet and Dezfouli, Behnam},
+  month    = jan,
+  year     = {2019},
+  note     = {arXiv: 1810.07730},
+  keywords = {Computer Science - Networking and Internet Architecture, Computer Science - Performance}
+}

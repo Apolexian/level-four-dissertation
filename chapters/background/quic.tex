@@ -1,23 +1,23 @@
 \section{The evolution of the transport layer}
 
-In the following section we provide a background on transport layer protocols and recent advancements in the space applicable to the body of work conducted.
+The following section provides a background on transport layer protocols and recent advancements in the space applicable to the body of work conducted.
 Together, the protocols described comprise most of the traffic on the Internet.
-Hence, smaller use-case protocols that do exist were not seen as applicable.
+Hence, we do not consider more minor use-case protocols that exist.
 
-First described by~\citet{cerf_protocol_1974}, the Transmission Control Protocol (TCP) has been the main protocol of the Internet suite since its initial implementation.
+First described by~\citet{cerf_protocol_1974}, the Transmission Control Protocol (TCP) has been the primary protocol of the Internet suite since its initial implementation.
 TCP provides a \textit{reliable} and \textit{ordered} delivery of bytes.
-That is, TCP ensures that data is not lost, altered or duplicated and is delivered in the same order that it was sent.
-This is achieved by assigning a sequence number to each transmitted packet and requiring an \textit{acknowledgment} (commonly referred to as ACK) from the receiving side.
+TCP ensures that data is not lost, altered or duplicated and delivers it in the same order that it sent it.
+TCP achieves this by assigning a sequence number to each transmitted packet and requiring an \textit{acknowledgement} (commonly referred to as ACK) from the receiving side.
 If an ACK is not received, the data is re-transmitted.
-On the receiving side, the sequence numbers can also be used to order packets as intended by the sender.
+TCP can also use the sequence numbers to order packets in the order intended by the sender on the receiving side.
 
-As TCP is a connection based protocol, connection establishment must take place before any data can be transmitted.
-The receiving side (the server) must bind to and listen on a network port and the sender (the client) must initiate the connection using the process of a \textit{three-way handshake} as shown in Figure \ref{fig:tcp}.
+As TCP is a connection-based protocol, connection establishment must occur before any data can be transmitted.
+The receiving side (the server) must bind to and listen on a network port, and the sender (the client) must initiate the connection using the process of a \textit{three-way handshake} as shown in Figure \ref{fig:tcp}.
 In the first step of the handshake, the client sends a segment with a \textit{synchronise sequence number} (SYN) that indicates the start of the communication and the sequence number that the segment starts with.
-The server responds with an acknowledgment - ACK, and the sequence number it will start its segment with - SYN.
-Hence, this step is often referred to as the SYN-ACK.
+The server responds with an acknowledgement - ACK, and the sequence number it will start its segment with - SYN.
+Hence, we refer to this step as the SYN-ACK.
 In the third and final step, the client must acknowledge the response.
-At this point, the connection on which data can be transferred is established.
+At this point, TCP establishes the connection and can transfer data on it.
 
 \begin{figure}[ht]
     \begin{center}
@@ -56,35 +56,34 @@ At this point, the connection on which data can be transferred is established.
 \end{figure}
 
 In order to achieve \textit{secure communication}, TLS~\citep{rescorla_transport_2018} is often used in the TCP stack.
-In order to do this a separate TLS handshake has to occur in order to specify the version of TLS to use, decide on the cipher suites, authenticate the server via its public key and certificate authority's signature, and generate a session key that can be used for symmetric encryption during communication.
-In the TLS handshake the first step is for the client to send a $ClientHello$ message that specifies the highest version of TLS that the client supports, a list of suggested cipher suites, compression methods and a random number.
-The server responds with a $ServerHello$ message that contains the selected TLS version, cipher suite, compression method and its own random number.
+In order to do this, a separate TLS handshake has to occur in order to specify the version of TLS to use, decide on the cypher suites, authenticate the server via its public key and certificate authority's signature, and generate a session key that the protocol uses for symmetric encryption during communication.
+In the TLS handshake, the first step is for the client to send a $ClientHello$ message that specifies the highest version of TLS that the client supports, a list of suggested cypher suites, compression methods and a random number.
+The server responds with a $ServerHello$ message containing the selected TLS version, cypher suite, compression method, and random number.
 The server then sends its certificate and $ServerKeyExchange$ message along with the $ServerHelloDone$ message indicating that it has completed its part of the negotiation process.
-The client will respond with the $ClientKeyExchange$ message (CKE) which, depending on the chosen cipher suite, may contain a public key.
-This is followed by the client sending a $ChangeCipherSpec$ message indicating that all communication from this point is authenticated and encrypted along with a finished message.
-The server responds with the same message and the TLS connection is established.
+The client will respond with the $ClientKeyExchange$ message (CKE), which may contain a public key depending on the chosen cypher suite.
+Following this, the client sends a $ChangeCipherSpec$ message indicating that communication from this point is authenticated and encrypted.
+The client combines this message with a client finished message.
+The server responds with the same message, establishing the TLS connection.
 
-Due to the establishment of communication and properties guaranteed by TCP, such as reliability through retransmission, an inherent trade-off is created, and latency is lengthened.
+Due to the establishment of communication and properties guaranteed by TCP, this process lengthens communication latency.
 Hence, in use-cases where reliability and connection state is not required, the User Datagram Protocol (UDP)~\citep{j_postel_1980} is preferred.
-UDP uses a connectionless communication model that aims to have a minimal number of semantics. The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
-This is preferable for real-time systems as using TCP for these would cause an overhead to latency and retransmission of packets that are no longer needed by the application.
+UDP uses a connectionless communication model with a minimal number of implementation semantics. The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
+UDP is preferable for real-time systems as using TCP would cause overhead to latency and retransmission of packets that the application no longer needs.
 
-QUIC is a relatively new general-purpose transport layer protocol originally designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine.
+QUIC is a relatively new general-purpose transport layer protocol designed by~\citet{jim_roskind_2012} initially at Google as part of the Chromium web engine.
 In 2015 the first draft of the QUIC protocol was submitted to the IETF and was later standardised~\citep{iyengar_quic_2021}.
 
-The aim of QUIC is to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing, which is a method of combining several signals or channels of communication over one shared medium.
+QUIC aims to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing, which is a method of combining several signals or channels of communication over one shared medium.
 QUIC establishes multiplexed connections between the communicating endpoints using UDP.
-
-
 
 QUIC facilitates data exchange on the UDP connection through the concept of \textit{streams}.
 Streams are an ordered byte-stream abstraction used by the application to send data of any length.
-Streams are created by either the sending or receiving side and can be both unidirectional and bidirectional.
-Each side can send data concurrently on the stream and can open any number of streams (specifically, a field for the maximum number of streams is set during the connection).
-Hence, subject to the constraints imposed by flow control, QUIC allows an arbitrary number of streams to send arbitrary amounts of data on the UDP connection.
+QUIC creates streams by either the sending or receiving side and can be unidirectional and bidirectional.
+Each side can send data concurrently on the stream and open any number of streams (specifically, QUIC provides a field for the maximum number of streams during the connection).
+Hence, QUIC allows an arbitrary number of streams to send arbitrary amounts of data on the UDP connection, subject to the constraints imposed by flow control.
 
-By doing so, QUIC also achieves secondary goal of lifting congestion control algorithms from the kernel space to the user space.
-Hence, congestion control algorithms can evolve without having to be tied down to kernel level semantics and constraints.
+By doing so, QUIC also achieves the secondary goal of lifting congestion control algorithms from the kernel space to the userspace.
+Hence, congestion control algorithms can evolve without being tied down to kernel level semantics and constraints.
 
 \begin{figure}[ht]
     \begin{center}
@@ -202,9 +201,8 @@ Hence, congestion control algorithms can evolve without having to be tied down t
     \end{center}
 \end{figure}
 
-Compared to TCP/TLS, QUIC combines the transport and cryptographic handshakes in order to minimise the time needed for connection establishment.
-A comparison of the handshakes can be seen in Figure \ref{fig:handshakes_comparison}.
-TLS is still used to secure QUIC as described by~\citet{thomson_using_2021} unless a different cryptographic protocol is specified.
-The initial QUIC handshake keeps the same handshake messages as TLS, however it uses its own framing format, replacing the TLS record layer.
-This ensures that the connection is always authenticated and encrypted, unlike in TLS where the initial handshake is still vulnerable.
-The combination also means that QUIC typically starts sending data after just one round-trip achieving security by default and lower latency.
+Compared to TCP/TLS, QUIC combines the transport and cryptographic handshakes to minimise the time needed for connection establishment; figure \ref{fig:handshakes_comparison} shows a comparison of the handshakes.
+QUIC still uses TLS functionality to secure communication as described by~\citet{thomson_using_2021} unless the developer specifies a different cryptographic protocol; however, this is done differently to TCP.
+The initial QUIC handshake keeps the same handshake messages as TLS; however, it uses its framing format, replacing the TLS record layer.
+This use ensures that the connection is always authenticated and encrypted, unlike TLS, where the initial handshake is vulnerable.
+The combination also means that QUIC typically starts sending data after one round-trip, achieving security by default and lower latency.

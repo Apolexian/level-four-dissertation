@@ -1,10 +1,10 @@
 \chapter{Network simulation}
 
-In order to evaluate network performance two main options were considered: using real IoT devices or using a network simulation tool.
-Due to technical limitations that came with using real devices, such as not being able to access the router of our network, simulation was chosen.
-In this chapter we will discuss how we used Mininet~\citep{lantz_mininet_2021}, a realistic virtual network, in our evaluation.
+When evaluating the network performance of the implementations, we considered two options: using real IoT devices or using a network simulation tool.
+Due to technical limitations that came with using real devices, such as not being able to access the router of our network, we opted for simulation.
+In this chapter, we will discuss how we used Mininet~\citep{lantz_mininet_2021}, a realistic virtual network, in our evaluation.
 
-Mininet is a tool that can be used to created software-defined networks (SNDs) using the $OpenFlow$ standard.
+Mininet is a tool that network developers and researchers can use to create software-defined networks (SNDs) using the $OpenFlow$ standard.
 
 \begin{figure}[ht]
     \centering
@@ -13,21 +13,23 @@ Mininet is a tool that can be used to created software-defined networks (SNDs) u
     \label{fig:mininet-topo}
 \end{figure}
 
-Using the Python API provided we created the network topology shown in Figure~\ref{fig:mininet-topo}.
-The script used takes several parameters in order to create a simulation environment resembling a realistic scenario.
-The variables that the script changes between simulations to do so are the link's \textit{bandwidth}, \textit{delay} and the rate of \textit{packet loss}.
+Using the Python API provided, we created the network topology shown in Figure~\ref{fig:mininet-topo}.
+The script takes several parameters to create a simulation environment resembling a realistic scenario.
+The variables that the script changes between simulations are the link's \textit{bandwidth}, \textit{delay} and the rate of \textit{packet loss}.
 
-The bandwidth of a link is the maximum rate of data transfer we can achieve on it.
-In contrast to bandwidth in signal processing, in computer networking bandwidth is typically measured in bits per second, rather than hertz.
-The delay of a link specifies the latency in terms of the time that a bit of data has to travel across a link and is typically measured in milliseconds.
-Link delay has a correspondence to the geographical distance between the communicating parties, however, in the case of IoT we can expect devices to be in local proximity.
-Lastly, the rate of packet loss shows the percentage of packets that were corrupted or dropped in transit.
-Due to these packets being retransmitted in various protocols, this rate also adds to the delay of data transfer.
+The bandwidth of a link is the maximum rate of data transfer we can achieve.
+In contrast to bandwidth in signal processing, we measure bandwidth in bits per second rather than hertz in computer networking.
+The delay of a link specifies the latency of the link.
+It is the time that a bit of data has to travel across a link. 
+We measure this in milliseconds.
+Link delay corresponds to the geographical distance between the communicating parties; however, in the case of IoT, we can expect devices to be in local proximity.
+Lastly, the packet loss rate shows the percentage of packets that were corrupted or dropped in transit.
+Various protocols having to retransmit packets also adds to the delay of data transfer.
 Importantly, we have only considered the typical circumstances of packet loss and have not included scenarios such as interference or packet loss attacks.
 
 The bandwidth and delay numbers correspond, as closely as possible, to various link types in a network.
-To do so we have gathered data from the~\cite{ofcom_uk_2021} report on UK broadband speeds.
-There were specific cases in which it was not possible to find this data in the report, hence it was augmented using a similar methodology in the work conducted by~\cite{previdi_is-is_2019} and in the case of ZigBee, the work by~\citet{alena_fault_2011}.
+To do so, we have gathered data from the~\cite{ofcom_uk_2021} report on UK broadband speeds.
+There were specific cases in which it was not possible to find this data in the report; hence it was augmented using a similar methodology in the work conducted by~\cite{previdi_is-is_2019} and in the case of ZigBee, the work by~\citet{alena_fault_2011}.
 
 \begin{table}[ht]
     \caption{The parameters chosen for each link simulation in Mininet. The types of links were chosen as the most commonly occurring ones in IoT use cases. The data also assumes a typical IoT setup where most devices are within local geographical proximity. That is, the devices are communicating between each other within the range of one factory or site, with only the central node communicating with some server.}\label{tab:links}
@@ -45,7 +47,23 @@ There were specific cases in which it was not possible to find this data in the 
     \end{tabular}
 \end{table}
 
-It was especially difficult to find exact estimates for packet loss rates with most sources describing only what is a "good" rate for a stable connection~\citep{sdu_ictp-sdu_2013}.
+It was complicated to find exact estimates for packet loss rates, with most sources describing approximations for a stable connection~\citep{sdu_ictp-sdu_2013} and not precise measurements.
 Hence, the data are best estimates, cross-validated through the different sources and are not exact values.
 
-Using the different links, a file of equal size was then transferred using the various QUIC implementations described in Chapter~\ref{chap:quic_impl}.
+Using the different links, we then transferred a file of equal size using the various QUIC implementations described in Chapter~\ref{chap:quic_impl} for the evaluation of QUIC implementations.
+
+We evaluated the MQTT/QUIC implementation performance using the same topology and simulation parameters.
+In general, MQTT allows for messages with a maximum size of approximately 260MB.
+However, this is a huge message, and most publicly deployed brokers will reject it, so a general use-case was simulated.
+
+Each topic in MQTT consists of a hierarchy of topic levels separated by a forward slash.
+For example, in a smart home scenario, we may have a topic like $home/groundfloor/kitchen/temp$ to control the temperature in the kitchen via a smart thermostat.
+A topic may also include a wildcard.
+The topic string $home/groundfloor/+/temp$ includes a \textit{single-level} wildcard that will match an arbitrary string.
+This would match the topic $home/groundfloor/lounge/temp$, but not match the topic $home/secondfloor/kitchen/temp$.
+If a client wishes to subscribe to multiple topics with the same prefix, a \textit{multi-level} wildcard may be used.
+For example, the topic $home/secondfloor/kitchen/\#$ can be used to subscribe to all topics with a prefix matching the string before the hash character.
+Notably, brokers reserve topics for system messages starting with the \$ character.
+
+Taking this into account, we opted for a smart home scenario to simulate the MQTT communication.
+The data transmitted can be found in Appendix~\ref{appendix:mqtt_message}.

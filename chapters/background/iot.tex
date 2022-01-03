@@ -1,44 +1,43 @@
 \section{The Internet of Things}
 
-It is hard to give a set criteria or definition for which devices qualify as IoT devices.
-Generally, an IoT device is usually a device possessing some processing power that may have embedded censors.
-The key aspect of IoT devices is that they facilitate exchange of data with other devices and systems over the Internet.
+It is hard to give a set criterion or definition for which devices qualify as IoT devices.
+Generally, an IoT device usually possesses some processing power and may have embedded sensors.
+The key aspect of IoT devices is that they facilitate data exchange with other devices and systems over the Internet.
 The modern version of IoT can be attributed to\citepos{weiser_computer_1991} work on ubiquitous computing, although the term itself first appeared in a speech by Peter T. Lewis in 1985.
-IoT has a multitude of applications in various fields including smart home automation, healthcare, consumer applications and others.
+IoT has many applications in various fields, including smart home automation, healthcare, consumer applications, etc.
 
-In terms of classifications within networking, IoT technologies can generally be split into wireless and wired, with the former further being split into short range, medium range and long range.
+In terms of classifications within networking and IoT technologies, we can generally split them into wireless and wired, with the former split into short-range, medium-range, and long-range.
 
-Short range wireless IoT technologies include bluetooth mesh networks, Z-wave, ZigBee and Wi-Fi, as well as other lesser used technologies.
-Due to the inherent advantages that come with short range wireless communication in IoT applications such as smart homes, this category of IoT technologies was the primary focus for the project, as discussed in later chapters.
+Short-range wireless IoT technologies include Bluetooth mesh networks, Z-wave, ZigBee and Wi-Fi, and other lesser-used technologies.
+Due to the inherent advantages of short-range wireless communication in IoT applications such as smart homes, this category of IoT technologies was the primary focus for the project, as discussed in later chapters.
 Medium range networks are used heavily in mobile devices with technologies such as LTE and 5G.
 The technologies again present an interest due to the amount of traffic that the Internet sees from mobile devices.
-Long range networks, on the other hand, are quite specific in their applications.
-For example, VSAT - a satellite communication technology that uses small dish antennas.
-Due to the limited application of long range technologies when compared to the previous categories, these were left out of the analysis.
+On the other hand, long-range networks are rather specific in their applications, for example, VSAT - a satellite communication technology that uses small dish antennas.
+Due to the limited application of long-range technologies, we opted to leave them out of our analysis.
 
-In terms of wired technologies used by IoT devices, ethernet remains the dominant general purpose networking standard.
-Although wired technologies provide advantages in terms of data transfer speed, they do limit deployments due to the physical wiring constraints.
+Ethernet remains the dominant general-purpose networking standard in terms of wired technologies used by IoT devices.
+Although wired technologies provide advantages in terms of data transfer speed, they limit deployments due to the physical wiring constraints.
 
 Due to the uses of IoT, the form factor of these devices has to be physically small.
-Many of these devices have to run for long periods of time on a single lithium battery, hence needing to consume as least energy as possible.
+Many of these devices have to run for long periods on a single lithium battery, hence needing to consume as least energy as possible.
 Additionally, many use cases of IoT devices require a large number of them connected in a network.
 For example,~\cite{ericsson_iot_2018} estimated that $0.5$ connected devices were used per square meter in a smart factory, with demand growing.
-This adds an additional economical constraint to IoT devices - they need to be made from relatively cheap components.
+Large scale deployments add economic constraints to IoT devices as they need to be manufactured from relatively cheap components.
 
-These constraints mean that IoT devices are limited when it comes to hardware resources.
-Hardware limitations come in three main forms - CPU power, memory and storage.
-Storage in the form of flash memory provides the hardest to solve problems when it comes to secure data transfer.
+These constraints mean that IoT devices are limited in hardware resources.
+Hardware limitations come in three primary forms - CPU power, memory and storage.
+Storage in the form of flash memory provides the hardest to solve problems regarding secure data transfer.
 The keys required for protocols such as TLS are often large and need to be stored.
 For example, the $ESP8266$ controller, a widely used IoT chip, comes with $4$Mb of flash memory.
-After the installation of the firmware and binaries needed for the device to perform its function, little to no memory may remain for additional storage.
+After installing the firmware and binaries needed for the device to perform its function, little to no memory may remain for additional storage.
 
-Efforts to classify the security issues in the IoT space~\citep{alaba_internet_2017,gupta_security_2021,swamy_security_2017} and create a taxonomy have generally shown several main topics: issues with privacy due to authentication and authorisation, and general security concerns due to poor encryption at the transport layer.
+Efforts to classify the security issues in the IoT space~\citep{alaba_internet_2017,gupta_security_2021,swamy_security_2017} and create a taxonomy have generally shown several main topics: issues with privacy due to authentication and authorisation and general security concerns due to poor encryption at the transport layer.
 
-Insecure firmware in IoT devices come from both the issues with firmware updates and generally insecure code.
-Most software written for IoT devices is written in the C programming language, which while providing the needed efficiency, is also a source of insecure code that can lead to potential attacks, such as buffer overflows.
+Insecure firmware in IoT devices comes from issues with firmware updates and generally insecure code.
+Most programmers opt to create software for IoT devices in the C programming language, which, while providing the needed efficiency, is also a source of insecure code that can lead to potential attacks, such as buffer overflows.
 
-On the other hand, to ensure privacy and general security we must ensure data integrity and confidentiality.
-The data that is sent must not be tampered with, nor snooped on during communication.
-This requires secure methods for authentication, authorisation and transport level encryption.
+On the other hand, we must ensure data integrity and confidentiality to ensure privacy and general security.
+Data sent via the network must not be tampered with nor snooped on by third parties during communication.
+Hence, privacy requires secure methods for authentication, authorisation and transport-level encryption.
 
 Hence, finding a way to circumvent the hardware constraints presented by IoT devices and still provide secure data transfer is paramount to the safe adoption of IoT.
