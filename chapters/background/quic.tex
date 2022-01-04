@@ -196,7 +196,7 @@ Hence, congestion control algorithms can evolve without being tied down to kerne
             \caption{QUIC}
             \label{fig:handshakes:quic}
         \end{subfigure}
-        \caption{Handshakes required to establish secure data transmission in the TCP/TLS stack \subref{fig:handshakes:tls} and the QUIC stack \subref{fig:handshakes:quic}. In the case of TCP/TLS we can see that the handshake is substantially more complex and that the TLS handshake requires the full TCP handshake before it can proceed. In both cases these handshakes can be made quicker. In the case of TLS, version 1.3 allows for one less round trip before data can be sent, and in the case of QUIC 0-RTT connection re-establishment may be used in come cases, allowing to send data in the first packet.}
+        \caption{Handshakes required to establish secure data transmission in the TCP/TLS stack \subref{fig:handshakes:tls} and the QUIC stack \subref{fig:handshakes:quic}. In the case of TCP/TLS, we can see that the handshake is substantially more complex and that the TLS handshake requires the full TCP handshake before it can proceed. In both cases, these handshakes can be made quicker. In the case of TLS, version 1.3 allows for one less round trip before data can be sent, and in the case of QUIC 0-RTT, connection re-establishment may be used in some cases, allowing to send data in the first packet.}
         \label{fig:handshakes_comparison}
     \end{center}
 \end{figure}

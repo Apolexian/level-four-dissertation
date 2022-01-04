@@ -20,19 +20,19 @@ The variables that the script changes between simulations are the link's \textit
 The bandwidth of a link is the maximum rate of data transfer we can achieve.
 In contrast to bandwidth in signal processing, we measure bandwidth in bits per second rather than hertz in computer networking.
 The delay of a link specifies the latency of the link.
-It is the time that a bit of data has to travel across a link. 
+It is the time that a bit of data takes to travel across a link. 
 We measure this in milliseconds.
 Link delay corresponds to the geographical distance between the communicating parties; however, in the case of IoT, we can expect devices to be in local proximity.
-Lastly, the packet loss rate shows the percentage of packets that were corrupted or dropped in transit.
+Lastly, the packet loss rate shows the percentage of corrupted or dropped packets in transit.
 Various protocols having to retransmit packets also adds to the delay of data transfer.
 Importantly, we have only considered the typical circumstances of packet loss and have not included scenarios such as interference or packet loss attacks.
 
 The bandwidth and delay numbers correspond, as closely as possible, to various link types in a network.
 To do so, we have gathered data from the~\cite{ofcom_uk_2021} report on UK broadband speeds.
-There were specific cases in which it was not possible to find this data in the report; hence it was augmented using a similar methodology in the work conducted by~\cite{previdi_is-is_2019} and in the case of ZigBee, the work by~\citet{alena_fault_2011}.
+There were specific cases in which it was not possible to find this data in the report; hence it was augmented using a similar methodology in work conducted by~\cite{previdi_is-is_2019} and in the case of ZigBee, the work by~\citet{alena_fault_2011}.
 
 \begin{table}[ht]
-    \caption{The parameters chosen for each link simulation in Mininet. The types of links were chosen as the most commonly occurring ones in IoT use cases. The data also assumes a typical IoT setup where most devices are within local geographical proximity. That is, the devices are communicating between each other within the range of one factory or site, with only the central node communicating with some server.}\label{tab:links}
+    \caption{The parameters chosen for each link simulation in Mininet. The types of links were chosen as the most commonly occurring ones in IoT use cases. The data also assumes a typical IoT setup where most devices are within local geographical proximity. That is, the devices are communicating with each other within the range of one factory or site, with only the central node communicating with some server.}\label{tab:links}
     %\tt 
     \rowcolors{2}{}{gray!3}
     \begin{tabular}{@{}llll@{}}
