@@ -81,7 +81,7 @@ The connection request can specify a quality of service, referred to as the QoS 
                 \end{tabular}};
             \draw[->] (L) -- (M) node[midway,sloped,above]{\verb$Publish Message B, Topic A$};
         \end{tikzpicture}
-        \caption{The MQTT connection, specifying the QoS measure, followed by the publishing of message to a broker. It is important to note that the QoS measure does not impact the underlying data transmission provided by a protocol such as TCP. In this example, client B publishes message B to topic A after connecting, and the broker publishes this message to client A as it previously subscribed to topic A.}
+        \caption{The MQTT connection, specifying the QoS measure, followed by the publishing of a message to a broker. It is important to note that the QoS measure does not impact the underlying data transmission provided by a protocol such as TCP. In this example, client B publishes message B to topic A after connecting, and the broker publishes this message to client A as it previously subscribed to topic A.}
         \label{fig:mqtt}
     \end{center}
 \end{figure}
@@ -104,7 +104,7 @@ The most widely used suite for providing data transfer and encryption for MQTT i
 
 As QUIC provides such a form of communication, we can see that we can use it as the transport level protocol for MQTT.
 The benefits of this are numerous. 
-For example, the perceived performance benefits from a lower communication overhead and the encryption provided at header and packet levels.
+For example, perceived performance benefits from lower communication overhead and encryption at header and packet levels.
 QUIC also comes with the benefit of multiplexing.
 QUIC can open several streams on a single connection instead of opening several connections from one client.
 Multiplexing will later play an essential role in our implementation of MQTT/QUIC.
@@ -115,4 +115,4 @@ We present a comparison of these results to the ones obtained through the evalua
 
 Due to the authors' chosen underlying QUIC implementation, their API implementation requires its own message queue amongst other common functions such as key settlement.
 The QUIC implementation chosen for this project allows the library to handle some of this logic instead.
-We justify our choice of QUIC library and compare existing implementations in chapter~\ref{chap:quic_impl}.
+We justify our choice of QUIC library and compare existing implementations in chapter~\ref{section:quic_impl}.
