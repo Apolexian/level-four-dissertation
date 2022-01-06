@@ -1,4 +1,11 @@
 \chapter{Foundational implementations}\label{chap:libs}
 
+This chapter presents the rationale behind our choice of QUIC and MQTT implementations.
+In terms of QUIC, we used the $quinn$ implementation in order to create the intermediate library discussed in Chapter~\ref{chapter:quic_socket}.
+On the MQTT side, $rumqtt$ was used as the starting point for our MQTT/QUIC implementation.
+
+The choice criteria follow from the previously presented background and some general criteria.
+We analysed the available implementations based on their storage footprint, the programming language they were implemented in, their use of TLS, widespread adoption and availability of documentation.
+
 \input{chapters/libs/quic_impls.tex}
 \input{chapters/libs/mqtt_impls.tex}

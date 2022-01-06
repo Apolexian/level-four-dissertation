@@ -1,12 +1,10 @@
 \section{The evolution of the transport layer}
 
-The following section provides a background on transport layer protocols and recent advancements in the space applicable to the body of work conducted.
-Together, the protocols described comprise most of the traffic on the Internet.
-Hence, we do not consider more minor use-case protocols that exist.
+This section presents a background of the network protocols at the transport layer, starting from the currently dominant standards and ending with new advancements in the field.
+We also consider how to provide secure communication at the transport layer using encryption.
 
 First described by~\citet{cerf_protocol_1974}, the Transmission Control Protocol (TCP) has been the primary protocol of the Internet suite since its initial implementation.
-TCP provides a \textit{reliable} and \textit{ordered} delivery of bytes.
-TCP ensures that data is not lost, altered or duplicated and delivers it in the same order that it sent it.
+TCP provides a \textit{reliable} and \textit{ordered} delivery of bytes, ensuring that data is not lost, altered or duplicated and delivered in the same order as intended by the sender.
 TCP achieves this by assigning a sequence number to each transmitted packet and requiring an \textit{acknowledgement} (commonly referred to as ACK) from the receiving side.
 If an ACK is not received, the data is re-transmitted.
 TCP can also use the sequence numbers to order packets in the order intended by the sender on the receiving side.
@@ -67,22 +65,20 @@ The server responds with the same message, establishing the TLS connection.
 
 Due to the establishment of communication and properties guaranteed by TCP, this process lengthens communication latency.
 Hence, in use-cases where reliability and connection state is not required, the User Datagram Protocol (UDP)~\citep{j_postel_1980} is preferred.
-UDP uses a connectionless communication model with a minimal number of implementation semantics. The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
+UDP uses a connectionless communication model with a minimal number of implementation semantics.
+The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
 UDP is preferable for real-time systems as using TCP would cause overhead to latency and retransmission of packets that the application no longer needs.
 
-QUIC is a relatively new general-purpose transport layer protocol designed by~\citet{jim_roskind_2012} initially at Google as part of the Chromium web engine.
-In 2015 the first draft of the QUIC protocol was submitted to the IETF and was later standardised~\citep{iyengar_quic_2021}.
-
-QUIC aims to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing, which is a method of combining several signals or channels of communication over one shared medium.
-QUIC establishes multiplexed connections between the communicating endpoints using UDP.
-
-QUIC facilitates data exchange on the UDP connection through the concept of \textit{streams}.
+While TCP and UDP have been the dominant standards of the internet since its creation, QUIC is a relatively new general-purpose transport layer protocol first designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine and standardised by the IETF in 2021~\citep{iyengar_quic_2021}.
+QUIC aims to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing over a UDP connection.
+Multiplexing is a method of combining several signals or channels of communication over one shared medium.
+QUIC makes use of multiplexing by facilitating data exchange on the UDP connection through the concept of \textit{streams}.
 Streams are an ordered byte-stream abstraction used by the application to send data of any length.
-QUIC creates streams by either the sending or receiving side and can be unidirectional and bidirectional.
-Each side can send data concurrently on the stream and open any number of streams (specifically, QUIC provides a field for the maximum number of streams during the connection).
-Hence, QUIC allows an arbitrary number of streams to send arbitrary amounts of data on the UDP connection, subject to the constraints imposed by flow control.
+Any number of QUIC streams, unidirectional or bidirectional, can be created by either side during the connection.
+Hence, QUIC allows an arbitrary number of streams to send arbitrary amounts of data on a single UDP connection, subject to the constraints imposed by flow control.
 
-By doing so, QUIC also achieves the secondary goal of lifting congestion control algorithms from the kernel space to the userspace.
+By doing so, QUIC also achieves other performance benefits.
+For example, QUIC lifts congestion control algorithms from the kernel space to the userspace.
 Hence, congestion control algorithms can evolve without being tied down to kernel level semantics and constraints.
 
 \begin{figure}[ht]

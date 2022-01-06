@@ -1,4 +1,4 @@
-\section{The Rust programming language}
+\section{Rust programming language}
 
 Rust is a modern systems programming language created at Mozilla designed to be highly safe and performant.
 It is a systems language that aims to maintain the performance that we expect from languages like C while also using a unique \textit{ownership} system to maintain memory safety.
@@ -6,7 +6,7 @@ Instead of garbage collection, Rust opts for a system managed through the resour
 All values have a unique owner, and their scope is tied to this owner.
 Hence, by design, Rust does not allow dangling pointers, null pointers, and data races as the compiler will not allow for a programmer to compile unsafe code without circumventing it using the $unsafe$ keyword.
 
-For example, consider the program written in C in Listing~\ref{lst:C} compared to a similar application in Rust in~\ref{lst:Rust}.
+For example, consider the program written in C in Listing~\ref{lst:C} compared to a similar application in Rust in Listing~\ref{lst:Rust}.
 The C program demonstrates a use after free bug.
 The pointer is freed and then used in the print statement, resulting in undefined behaviour.
 While this example is relatively trivial, these bugs are often tough to debug in a more extensive, more complex system, leading to security vulnerabilities.
@@ -33,9 +33,8 @@ On the other hand, the analogous Rust code will not compile due to the ownership
     }
 \end{lstlisting}
 
-Additionally, due to the focus on concurrency and safe systems programming, Rust has a natural use in networked systems.
-However, while Rust aims to be as fast as traditional systems languages, this remains to be seen with even the language's developers saying that the matter of performance is hard to assess~\cite{rust_faq_2021}. Therefore, the interest in Rust in this project comes from two main aspects.
+When it comes to networked systems in the IoT space, Rust is a natural application due to its focus on concurrency and safe systems programming.
 Firstly, a memory-safe language may circumvent security-related bugs in IoT firmware and the supporting network stacks.
-As previously discussed, getting the firmware correct on the first try is essential in IoT due to the difficulty of updates.
-Secondly, assessing the performance of Rust implementations of the QUIC stack is vital to solidifying Rust as a performant systems programming language.
-If the binary sizes produced by the Rust implementations are larger than their C equivalents or if the code is not as performant, then the memory safety guarantees would not matter.
+As previously discussed, getting the firmware correct on the first try is essential in IoT due to the difficulty of providing updates.
+However, assessing the performance of Rust implementations of the QUIC stack is vital to solidifying Rust as a performant systems programming language for hardware constrained devices.
+If the binary sizes produced by the Rust implementations are larger than their C equivalents or if the code is not as performant, then the memory safety guarantees may not matter for IoT developers.
