@@ -1,1 +1,15 @@
 \section{MQTT}\label{section:mqtt_impls}
+
+Compared to QUIC, the choice of MQTT implementation was substantially simpler.
+The criteria for MQTT implementation were that it was developed in Rust, implemented both a client and a broker, had widespread use and adhered to MQTT version 5.0.
+Based on the above criteria we identified two possible implementations:\citepos{eclipse_eclipse_2018} $paho$ and $rumqtt$~\citep{bytebeam_rumqtt_2020}.
+We opted to use $rumqtt$ at it is a native Rust implementation, whereas $paho$ provides a rust binding to an underlying C implementation.
+We chose to evaluate a fully Rust native MQTT/QUIC stack as this provides an opportunity for a valuable comparison to mainstream C implementations.
+Other available implementations supported only one side of the MQTT protocol or only supported version 3.1.1.
+
+$Rumqtt$ provides to components for an MQTT application - $rumqttc$ and $rumqttd$.
+The former can be used to create an MQTT client, and the latter a broker.
+However, the code base for these is somewhat similar, easing the incorporation of QUIC.
+Both components provide an interface for supporting asynchronous communication using a $tokio$ runtime, which fits nicely into our choice of QUIC implementation as $Quinn$ requires a $tokio$ environment.
+By default, $rumqtt$ uses TCP as its transport layer protocol and TLS through $rustls$.
+All underlying implementation assumptions remain equal because this is the same library as $Quinn$ uses.

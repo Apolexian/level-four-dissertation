@@ -1,1 +1,73 @@
 \chapter{QuicSocket}\label{chapter:quic_socket}
+
+This chapter will present $QuicSocket$~\footnote{QuicSocket - \url{https://github.com/Apolexian/QuicSocket}} - the intermediate wrapper API that we developed using $Quinn$ to facilitate establishing a QUIC connection, control streams, and send and receive data.
+
+$QuicSocket$ provides two main types to communicate with $Quinn$ - a $QuicServer$ and a $QuicClient$, and a trait that both of these implement - $QuicSocket$.
+The $QuicSocket$ trait defines three function: $new$, $send$ and $recieve$. 
+When initialised using the $new$ function, the server and the client attempt to open a QUIC connection.
+In the case of the server, it binds to a given port and starts listening for a connection request.
+The client binds to a random available port and attempts to connect to a provided URL.
+Additionally, in the $new$ function, the server generates a new TLS certificate or reads it from a specified path.
+The client's $new$ function must be supplied with the corresponding certificate's path.
+If either certificate is not present, the server will reject the connection attempt.
+Once a connection has been opened, data transfer can happen.
+
+\begin{lstlisting}[language=Rust, caption={The $send$ function that the $QuicClient$ and $QuicServer$ use for sending data. Data transfer is facilitated by opening a bidirectional stream on the pre-existing connection.}, label=lst:quicsocket_send]
+    async fn send(&mut self, payload: Vec<u8>) -> Result<()> {
+        let (mut send, _) = self
+            .connection
+            .open_bi()
+            .await
+            .map_err(|e| anyhow!("failed to open stream: {}", e))
+            .unwrap();
+        send.write_all(&payload)
+            .await
+            .map_err(|e| anyhow!("failed to send request: {}", e))?;
+        send.finish()
+            .await
+            .map_err(|e| anyhow!("failed to shutdown stream: {}", e))?;
+        Ok(())
+    }
+\end{lstlisting}
+
+In order to send data, either side can use the $send$ function demonstrated in Listing~\ref{lst:quicsocket_send}.
+We first open a bidirectional stream and then write the provided payload.
+Once the client completes writing the payload, it shuts down the stream.
+On the other side, the receive function in Listing~\ref{lst:quicsocket_recv} processes the next available QUIC stream and reads the data on it into a supplied buffer.
+It then returns the number of bytes written to the buffer.
+Hence, to use $QuicSocket$, we must either provide or generate TLS certificates, open a QUIC connection and then use the send and receive functions.
+The developed API is analogous to how a TCP socket sends and receives data.
+An alternative approach that we considered was to make the $recv$ function return the value that the client or server read from the stream.
+However, this approach does not integrate well into any protocol implementation due to the general preference for the buffer pattern.
+
+\begin{lstlisting}[language=Rust, float, caption={A similar application in Rust will not compile due to the safety guaranteed by the ownership system. A borrow occurs when $example\_ref$ is assigned to point to $new\_example$, however the ownership system recognises that the borrowed value does not live long enough.}, label=lst:quicsocket_recv]
+    async fn recv(&mut self, buf: &mut [u8]) -> Result<usize> {
+        let (_, mut recv) = self.bi_streams.next().await.unwrap().unwrap();
+        let len = recv
+            .read(buf)
+            .await
+            .map_err(|e| anyhow!("failed to read response: {}", e))?;
+        Ok(len.unwrap())
+    }
+\end{lstlisting}
+
+Error handling is handled via the $anyhow$ package throughout the library for idiomatic error handling.
+In addition to this, we wrap return values in Rust's $Result$ construct.
+Hence, all errors are idiomatically mapped wherever a failure can occur.
+
+An important design choice that we have made when developing $QuicSocket$ is using QUIC streams.
+Every call to send and receive in the current implementation creates a bidirectional stream.
+An alternate choice was to open a stream at the start of the connection and use it until the connection closes.
+However, the latter approach runs into issues when it comes to reading from the stream.
+All data was read on one call to receive, which unnaturally coalesced MQTT packets.
+
+Notably, all operations happen asynchronously.
+However, as of the implementation time, the Rust standard library does not support asynchronous traits.
+The workaround to this issue is using the $async-trait$ crate. 
+An unfortunate drawback of using this crate is that every function call results in a heap allocation due to the crate's implementation semantics.
+The extra heap allocations do not usually present an issue; however, in the case of hardware constrained devices, this may lead to a bottleneck depending on the usage of the library.
+The reasons for not supporting asynchronous traits in Rust are somewhat complex.
+For one, an asynchronous function in Rust returns an $impl Future$, meaning that an asynchronous trait would have to support returning $impl Trait$, which it does not.
+However, the $async-trait$ crate instead returns a $dyn Future$, the Rust implementation of dynamic dispatch, resulting in a heap allocation but allowing it to be used inside of traits.
+We will not further discuss the other reasons for this crate's existence; however,~\cite{matsakis_baby_2019} created a comprehensive analysis of this issue.
+Once Rust incorporates asynchronous traits into the language, the heap allocation issue will be resolved, resulting in this problem no longer existing for hardware constrained devices.
