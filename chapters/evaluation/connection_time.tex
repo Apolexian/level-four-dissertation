@@ -1,1 +1,23 @@
 \section{Connection time comparison} \label{sec:conn_time}
+
+In this section of the analysis, we focus on connection time.
+By connection time, we mean two things: the time it takes for the underlying transport protocol to establish a secure connection and the total time taken before MQTT sends its first data packet.
+
+Connection time is essential in IoT devices as many do not connect while idling.
+A device may opt not to be connected at all times to reduce energy consumption and computational power.
+The device will then establish a connection and transmit data whenever required.
+However, this means that some efficiency is lost if the connection has to be constantly re-established.
+Hence, MQTT defines the period to keep the connection alive as the \textit{keep alive interval}.
+In an MQTT/TCP implementation, the standard way to extend the keep alive interval is to periodically send a $ping$ packet, forcing the connection to remain open.
+However, it has been shown that this method can lead to security vulnerabilities~\citep{vaccari_slowtt_2020,mileva_comprehensive_2021}.
+
+We have talked previously about QUIC having a less complex handshake and hence being able to establish a secure connection quicker than TCP/TLS.
+Hence, using QUIC in MQTT is a step closer to providing the needed efficiency while not having to use methods that may lead to vulnerabilities.
+
+To measure the connection time we have began a communication via MQuicTT and the other MQTT implementations and captured it using $tcpdump$.
+We have then extracted the time between the start of the QUIC or TCP communication and the completion of the handshake, as well as the time before MQTT sends its first data packet.
+The results of this are shown in Figure TBA.
+
+[Figure here]
+
+[Discussion here]

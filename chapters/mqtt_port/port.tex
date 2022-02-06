@@ -1,1 +1,78 @@
-\chapter{MQTT with QUIC at the transport layer}
+\chapter{MQuicTT} \label{chap:port}
+
+This section describes how we used $QuicSocket$ to create a QUIC port of $rumqtt$, the design decisions that we have taken, and possible alternate approaches.
+
+As previously mentioned, $rumqtt$ provides to APIs: $rumqttc$ for creating MQTT clients and $rumqttd$ for creating brokers.
+Hence, each of these APIs relies on an underlying TCP implementation to transmit data.
+A configuration file is also required for $rumqtdd$ that specifies various parameters such as paths to TLS keys and the ports that MQTT will operate on.
+Additionally, $rumqtt$ implements its own layer of TLS to ensure secure communication on top of the TLS layer provided by the underlying transport protocol.
+
+To create $MQuicTT$, we have taken steps that can broadly be summarised in two phases: altering the default TLS code and changing the underlying transport protocol from TCP to QUIC.
+
+As we are working in the domain of hardware constrained devices, providing multiple layers of encryption would be excessive, even for the goal of secure communication.
+We can afford for only the transport layer to handle encryption.
+Hence, the first step that we have taken is to remove all TLS functionality from both $rumqttd$ and $rumqttc$.
+
+After this, we identified that both APIs have a central interface that controls network communication.
+In the case of $rumqttc$ this is the $network$ struct inside $framed.rs$~\footnote{framed.rs - \url{https://github.com/bytebeamio/rumqtt/blob/master/rumqttc/src/framed.rs}} and in the case of $rumqttd$ it is the $network$ struct inside $network.rs$~\footnote{network.rs - \url{https://github.com/bytebeamio/rumqtt/blob/master/rumqttd/src/network.rs}}.
+Both of these interfaces use a $tcpstream$ to send and receive data.
+The $tcpstream$ is opened when the struct is initialised and closed when the MQTT connection ends.
+As TCP is a stateful protocol, minimal connection handling occurs after opening the initial stream.
+
+\begin{lstlisting}[language=Rust, caption={An example of initialising an MQuicTT client. The QUIC connection is established by initialising a $QuicClient$ and the resulting client is passed as an MQTT option.}, label=lst:MQuicTT:client]
+    #[tokio::main(worker_threads = 1)]
+    async fn main() {
+        ...
+        let quic_client = QuicClient::new(None).await;
+        let mut mqttoptions = MqttOptions::new("test-1", ip, 1883, addr, quic_client);
+        mqttoptions.set_connection_timeout(10);
+        mqttoptions.set_keep_alive(5);
+    
+        let (client, mut eventloop) = AsyncClient::new(mqttoptions, 100);
+        task::spawn(async move {
+            requests(client).await;
+        });
+    }
+\end{lstlisting}
+
+As we have modelled $QuicSocket$ to have an API that closely resembles a typical $tcpstream$ API, the challenge of this stage of the port was managing QUIC streams and the state of connection.
+Due to UDP, the protocol underlying QUIC, being stateless, we have handled the connection differently in brokers and clients.
+
+The connection request is sent before an MQTT client object is initialised in the client's case.
+Upon successful connection, the programmer must pass the connection to the initialisation function of the client.
+This means that a single QUIC connection underpins the client's entire MQTT connection, and streams are used for packets.
+Hence, when the client wishes to close the MQTT connection, it also closes the underlying QUIC connection.
+In order to do this we have modified the parameters needed to create an $rumqtt$ MQTT client.
+An example of the initialisation of a QUIC connection and MQTT client using our implementation is demonstrated in Listing~\ref{lst:MQuicTT:client}.
+
+In the case of a broker, we must wait for a client to send a connection request.
+Hence, we may initialise the broker and wait for a QUIC connection, only allowing data transfer when any connection is established.
+This also means that the broker does not need to track which connection comes from which client.
+
+\begin{lstlisting}[language=Rust, caption={An example of initialising an MQuicTT broker. We can see that no operations with $QuiSocket$ are required for this initialisation as all QUIC operations are handled internally.}, label=lst:MQuicTT:broker]
+    fn main() {
+        pretty_env_logger::init();
+        let config: Config = confy::load_path("rumqttd.conf").unwrap();
+        let mut broker = Broker::new(config);
+
+        let mut tx = broker.link("localclient").unwrap();
+        thread::spawn(move || {
+            broker.start().unwrap();
+        });
+        ...
+    }
+
+\end{lstlisting}
+
+Hence, as we can see in Listing~\ref{lst:MQuicTT:broker}, the programmer is not required to use any $QuicSocket$ code when creating an $MQuicTT$ broker.
+
+We considered an alternate approach to refactoring the $rumqtt$ codebase to consolidate all network code into a shared internal package.
+This would mean that the API for creating a client and broker would be identical and perhaps more ergonomic.
+However, we decided not to go with this approach because $rumqttc$ and $rumqttd$ would no longer be disjoint, independent components.
+With the chosen approach, it is possible to use different underlying transport protocols for either side, which allows for flexibility in implementation.
+
+Another avenue of discussion stems from $rumqtt$ having two different client implementations: an asynchronous client and an asynchronous client.
+In either case, a $tokio$ eventloop is used to handle events.
+As $QuicSocket$ requires an asynchronous environment, the natural choice was to use the asynchronous client.
+It could however be possible to handle asynchronous events more efficiently by tying the QUIC eventloop to the MQTT eventloop as in the approach described by~\cite{kumar_implementation_2019}.
+In our case, we leave the comparison between these two approaches as an avenue for future work.

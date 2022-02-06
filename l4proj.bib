@@ -297,3 +297,60 @@
   month   = oct,
   year    = {2019}
 }
+
+@inproceedings{eggert_towards_2020,
+  title    = {Towards {Securing} the {Internet} of {Things} with {QUIC}},
+  doi      = {10.14722/diss.2020.23001},
+  abstract = {This paper is the first to evaluate the feasibility of deploying QUIC, a new UDP-based transport protocol currently undergoing IETF standardization, directly on resourceconstrained IoT devices. It quantifies the storage, compute, memory and energy requirements of the Quant QUIC stack on two different IoT platforms, and finds that a minimal standardscompliant QUIC client currently requires approximately 58 to 63 KB of flash and can retrieve 5 KB of data in 4.2 to 5.1 s over 0-RTT or 1-RTT connections, using less than 16 KB of heap memory (plus packet buffers), less than 4 KB of stack memory and less than 0.9 J of energy per transaction.},
+  author   = {Eggert, L.},
+  year     = {2020}
+}
+
+@article{vaccari_slowtt_2020,
+  title      = {{SlowTT}: {A} {Slow} {Denial} of {Service} against {IoT} {Networks}},
+  volume     = {11},
+  copyright  = {http://creativecommons.org/licenses/by/3.0/},
+  issn       = {2078-2489},
+  shorttitle = {{SlowTT}},
+  url        = {https://www.mdpi.com/2078-2489/11/9/452},
+  doi        = {10.3390/info11090452},
+  abstract   = {The security of Internet of Things environments is a critical and trending topic, due to the nature of the networks and the sensitivity of the exchanged information. In this paper, we investigate the security of the Message Queue Telemetry Transport (MQTT) protocol, widely adopted in IoT infrastructures. We exploit two specific weaknesses of MQTT, identified during our research activities, allowing the client to configure the KeepAlive parameter and MQTT packets to execute an innovative cyber threat against the MQTT broker. In order to validate the exploitation of such vulnerabilities, we propose SlowTT, a novel “Slow” denial of service attack aimed at targeting MQTT through low-rate techniques, characterized by minimum attack bandwidth and computational power requirements. We validate SlowTT against real MQTT services, by considering both plaintext and encrypted communications and by comparing the effects of the attack when targeting different application daemons and protocol versions. Results show that SlowTT is extremely successful, and it can exploit the identified vulnerability to execute a denial of service against the IoT network by keeping the connection alive for a long time.},
+  language   = {en},
+  number     = {9},
+  urldate    = {2022-02-05},
+  journal    = {Information},
+  author     = {Vaccari, Ivan and Aiello, Maurizio and Cambiaso, Enrico},
+  month      = sep,
+  year       = {2020},
+  keywords   = {Internet of Things, MQTT, cyber security, network security, protocols security, slow DoS attack},
+  pages      = {452}
+}
+
+@article{mileva_comprehensive_2021,
+  title    = {Comprehensive analysis of {MQTT} 5.0 susceptibility to network covert channels},
+  volume   = {104},
+  issn     = {0167-4048},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0167404821000316},
+  doi      = {10.1016/j.cose.2021.102207},
+  abstract = {Message Queuing Telemetry Transport (MQTT) is a publish-subscribe protocol which is currently popular in Internet of Things (IoT) applications. Recently its 5.0 version has been introduced and ensuring that it is capable of providing services in a secure manner is of great importance. It must be noted that holistic security analysis should also evaluate protocol’s susceptibility to network covert channels. That is why in this paper we present a systematic overview of potential data hiding techniques that can be applied to MQTT 5.0. We are especially focusing on network covert channels that, in order to exchange secrets, exploit characteristic features of this MQTT version. Finally, we develop proof-of-concept implementations of the chosen data hiding techniques and conduct their performance evaluation in order to assess their feasibility in practical setups.},
+  language = {en},
+  urldate  = {2022-02-05},
+  journal  = {Computers \& Security},
+  author   = {Mileva, Aleksandra and Velinov, Aleksandar and Hartmann, Laura and Wendzel, Steffen and Mazurczyk, Wojciech},
+  month    = may,
+  year     = {2021},
+  keywords = {Information hiding, IoT steganography, MQTT, Network covert channels, Network security, Network steganography},
+  pages    = {102207}
+}
+
+@inproceedings{andy_attack_2017,
+  title     = {Attack scenarios and security analysis of {MQTT} communication protocol in {IoT} system},
+  doi       = {10.1109/EECSI.2017.8239179},
+  abstract  = {Various communication protocols are currently used in the Internet of Things (IoT) devices. One of the protocols that are already standardized by ISO is MQTT protocol (ISO / IEC 20922: 2016). Many IoT developers use this protocol because of its minimal bandwidth requirement and low memory consumption. Sometimes, IoT device sends confidential data that should only be accessed by authorized people or devices. Unfortunately, the MQTT protocol only provides authentication for the security mechanism which, by default, does not encrypt the data in transit thus data privacy, authentication, and data integrity become problems in MQTT implementation. This paper discusses several reasons on why there are many IoT system that does not implement adequate security mechanism. Next, it also demonstrates and analyzes how we can attack this protocol easily using several attack scenarios. Finally, after the vulnerabilities of this protocol have been examined, we can improve our security awareness especially in MQTT protocol and then implement security mechanism in our MQTT system to prevent such attack.},
+  booktitle = {2017 4th {International} {Conference} on {Electrical} {Engineering}, {Computer} {Science} and {Informatics} ({EECSI})},
+  author    = {Andy, Syaiful and Rahardjo, Budi and Hanindhito, Bagus},
+  month     = sep,
+  year      = {2017},
+  keywords  = {Authentication, Data privacy, MQTT, Payloads, Ports (Computers), Protocols, attack, protocol, scenario},
+  pages     = {1--6}
+}

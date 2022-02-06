@@ -1,0 +1,52 @@
+\chapter{Mininet Topology Definition}\label{appendix:topo}
+
+The full mininet topology definition via the $dump$ and $links$ command. The Python API definition can also be found on GitHub~\footnote{Topology - \url{https://github.com/Apolexian/level4-scripts/blob/master/mesh_topo/mesh.py}}.
+
+\begin{lstlisting}[caption={Mininet $links$ on the used topology.}, label=lst:app:topo]
+
+    Links:
+    
+    h00-eth1<->h01-eth1 (OK OK) h00-eth2<->h02-eth1 (OK OK) 
+    h00-eth3<->h03-eth1 (OK OK) h00-eth4<->h04-eth1 (OK OK) 
+    h01-eth2<->h02-eth2 (OK OK) h01-eth3<->h03-eth2 (OK OK) 
+    h01-eth4<->h04-eth2 (OK OK) h02-eth3<->h03-eth3 (OK OK) 
+    h02-eth4<->h04-eth3 (OK OK) h03-eth4<->h04-eth4 (OK OK) 
+    h10-eth1<->h11-eth1 (OK OK) h10-eth2<->h12-eth1 (OK OK) 
+    h10-eth3<->h13-eth1 (OK OK) h10-eth4<->h14-eth1 (OK OK) 
+    h11-eth2<->h12-eth2 (OK OK) h11-eth3<->h13-eth2 (OK OK) 
+    h11-eth4<->h14-eth2 (OK OK) h12-eth3<->h13-eth3 (OK OK) 
+    h12-eth4<->h14-eth3 (OK OK) h13-eth4<->h14-eth4 (OK OK) 
+    s0-eth1<->h00-eth0 (OK OK) s0-eth2<->h01-eth0 (OK OK) 
+    s0-eth3<->h02-eth0 (OK OK) s0-eth4<->h03-eth0 (OK OK) 
+    s0-eth5<->h04-eth0 (OK OK) s0-eth6<->s9-eth2 (OK OK) 
+    s1-eth1<->h10-eth0 (OK OK) s1-eth2<->h11-eth0 (OK OK) 
+    s1-eth3<->h12-eth0 (OK OK) s1-eth4<->h13-eth0 (OK OK) 
+    s1-eth5<->h14-eth0 (OK OK) s1-eth6<->s9-eth3 (OK OK) 
+    s9-eth1<->h9-eth0 (OK OK)
+        
+    \end{lstlisting}
+
+\begin{lstlisting}[caption={Mininet $dump$ on the used topology.}, label=lst:app:topo]
+
+Dump:
+
+<Host h00: h00-eth0:10.0.0.1,h00-eth1:None,h00-eth2:None,h00-eth3:None,h00-eth4:None pid=17658> 
+<Host h01: h01-eth0:10.0.0.2,h01-eth1:None,h01-eth2:None,h01-eth3:None,h01-eth4:None pid=17660> 
+<Host h02: h02-eth0:10.0.0.3,h02-eth1:None,h02-eth2:None,h02-eth3:None,h02-eth4:None pid=17662> 
+<Host h03: h03-eth0:10.0.0.4,h03-eth1:None,h03-eth2:None,h03-eth3:None,h03-eth4:None pid=17664> 
+<Host h04: h04-eth0:10.0.0.5,h04-eth1:None,h04-eth2:None,h04-eth3:None,h04-eth4:None pid=17666> 
+<Host h9: h9-eth0:10.0.0.6 pid=17668> 
+<Host h10: h10-eth0:10.0.0.7,h10-eth1:None,h10-eth2:None,h10-eth3:None,h10-eth4:None pid=17670> 
+<Host h11: h11-eth0:10.0.0.8,h11-eth1:None,h11-eth2:None,h11-eth3:None,h11-eth4:None pid=17672> 
+<Host h12: h12-eth0:10.0.0.9,h12-eth1:None,h12-eth2:None,h12-eth3:None,h12-eth4:None pid=17674> 
+<Host h13: h13-eth0:10.0.0.10,h13-eth1:None,h13-eth2:None,h13-eth3:None,h13-eth4:None pid=17676> 
+<Host h14: h14-eth0:10.0.0.11,h14-eth1:None,h14-eth2:None,h14-eth3:None,h14-eth4:None pid=17678> 
+<OVSSwitch s0: lo:127.0.0.1,s0-eth1:None,s0-eth2:None,s0-eth3:None,s0-eth4:None,s0-eth5:None,
+    s0-eth6:None pid=17683> 
+<OVSSwitch s1: lo:127.0.0.1,s1-eth1:None,s1-eth2:None,s1-eth3:None,s1-eth4:None,s1-eth5:None,
+    s1-eth6:None pid=17686> 
+<OVSSwitch s9: lo:127.0.0.1,s9-eth1:None,s9-eth2:None,s9-eth3:None pid=17689> 
+<Controller c0: 127.0.0.1:6653 pid=17651> 
+
+\end{lstlisting}
+
