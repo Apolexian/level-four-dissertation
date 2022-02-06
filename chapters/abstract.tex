@@ -1,8 +1,8 @@
 \begin{abstract}
-    Every abstract follows a similar pattern. Motivate; set aims; describe work; explain results.
-    \vskip 0.5em
-    ``XYZ is bad. This project investigated ABC to determine if it was better. 
-    ABC used XXX and YYY to implement ZZZ. This is particularly interesting as XXX and YYY have
-    never been used together. It was found that  
-    ABC was 20\% better than XYZ, though it caused rabies in half of subjects.''
+    The standard protocols used to provide secure communication - TCP and TLS, often fall short for hardware constrained devices due to latency, connection overhead, head of line blocking and large hardware footprints.
+    QUIC - a new transport layer protocol is set to succeed the TCP/TLS stack and is advantageous for performance and security by design.
+    Due to the popularity of MQTT, a lightweight IoT protocol, in this work, we present MQuicTT - a QUIC based implementation of the MQTT protocol.
+    We analyse the landscape of existing QUIC implementations that we considered to underlay MQuicTT, discuss our implementation of a socket API for QUIC and the implementation of MQuicTT itself.
+    We also compare the performance of the resulting solution with existing MQTT implementations in various use cases.
+    Finally, we find that TLS contributes a significant overhead to the binary size of QUIC implementations and discusses possible alternatives.
 \end{abstract}
