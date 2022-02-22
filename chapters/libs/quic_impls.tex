@@ -1,9 +1,14 @@
-\section{QUIC} \label{section:quic_impl}
+\subsection{QUIC} \label{section:quic_impl}
 
 In this section, we compare the existing implementations of the QUIC protocol in the context of usability for IoT devices and present the reasoning behind our choice of QUIC library.
 We have considered the mainstream implementations in the C, C++, Rust and Go programming languages as these are the languages that can be considered systems languages and would thus be the most widely used ones for IoT devices.
 In addition to this, we did not consider implementations paired with a browser web engine as these would be impossible to use on hardware constrained devices.
 Hence, we did not include notable implementations such as the QUIC implementation of the chromium web engine~\citep{chromium_quic_2021} and $Neqo$~\citep{mozilla_neqo_2022}.
+
+Importantly, to analyse the performance of underlying QUIC implementations, we have transferred the same file using each implementation several times and have taken the average time to do so.
+We repeated this while altering parameters as described in Section~\ref{chap:net_sim}.
+The differences in transfer time were negligible and have hence not been presented as part of the comparison of libraries.
+Hence, we compare QUIC implementations in terms of their TLS use, programming language and the binary size produced by their client and server implementations.
 
 First, we consider the general landscape of available QUIC implementations to contextualise the ones developed in Rust.
 Table~\ref{tab:quics} demonstrates the analysed QUIC implementations.

@@ -1,6 +1,6 @@
-\chapter{QuicSocket}\label{chapter:quic_socket}
+\section{QuicSocket}\label{chapter:quic_socket}
 
-This chapter will present $QuicSocket$~\footnote{QuicSocket - \url{https://github.com/Apolexian/QuicSocket}} - the intermediate wrapper API that we developed using $Quinn$ to facilitate establishing a QUIC connection, control streams, and send and receive data.
+This section will present $QuicSocket$~\footnote{QuicSocket - \url{https://github.com/Apolexian/QuicSocket}} - the intermediate wrapper API that we developed using $Quinn$ to facilitate establishing a QUIC connection, control streams, and send and receive data.
 
 $QuicSocket$ provides two main types to communicate with $Quinn$ - a $QuicServer$ and a $QuicClient$, and a trait that both of these implement - $QuicSocket$.
 The $QuicSocket$ trait defines three function: $new$, $send$ and $recieve$. 

@@ -1,0 +1,26 @@
+\section{Hardware constrained protocols} \label{sec:iot-protos}
+
+We now motivate our focus on MQTT using QUIC by comparing this approach to other popular IoT protocols.
+
+The Constrained Restful Environments (CoRE) working group~\citep{core_wg} develops a framework for REST applications that run on constrained devices.
+The primary protocol that CoRE works on is the Constrained Application Protocol (CoAP)~\citep{Shelby2014}.
+CoAP is a specialised transfer protocol designed to work on constrained devices.
+CoAP emphasises a generic design that supports low overhead, machine-to-machine interaction, multicast and asynchronous messaging.
+As CoAP is seen as the successor to HTTP for hardware constrained devices, we do not focus on a comparison to HTTP.
+Other popular IoT protocols primarily consist of proprietary protocols that are phasing out due to the webs standardisation of REST.
+Hence, our primary point of comparison to MQTT with QUIC is CoAP.
+
+CoAP works by providing a usual request/response model between endpoints that mimics the style of HTTP requests while using UDP at the transport layer.
+In contrast to HTTP, CoAP relies on datagram-oriented UDP communication as its transport to support some of these features.
+The abstraction that CoAP provides is a UDP layer that deals with asynchrony and a request/response layer that specifies interactions.
+The header structure for CoAP and MQTT is very similar, with the significant difference being that MQTT needs an ordered reliable packet delivery mechanism.
+In the past, this restricted MQTT to the TCP/TLS stack; however, with the introduction of QUIC, we can see further similarities between CoAP and MQTT using QUIC with both protocols providing data transfer using UDP.
+A report on the active deployment of data transport protocols~\cite{tmobile_iot} showed that $62.61\%$ of deployments rely on MQTT as one of their protocols.
+In contrast, CoAP was the most widely used UDP based protocol, with $22.49\%$ of deployments relying on it as one of their protocols.
+This is in part because the class of constrained devices that CoAP targets does not cover the entire range of constrained IoT devices.
+The authors show that MQTT is more suitable for less constrained devices with long-standing connections; however, it may not be suitable for relatively more constrained devices.
+
+In this work, we have focused on providing MQTT with similar advantages that CoAP enjoys due to UDP and analysing if MQTT can be made more efficient to capture the range of more demanding hardware constrained devices.
+Capturing a wider range of constrained devices using MQTT would increase the number of deployments that can take advantage of its feature set.
+Additionally, the reasons for our choice stem not only from MQTT's popularity but also due to the exciting prospect of solving its historical dependency on TCP/TLS.
+This is further reinforced by CoAP showing a similar approach and being widely deployed for hardware constrained devices.

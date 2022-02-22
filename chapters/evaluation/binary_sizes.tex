@@ -2,22 +2,10 @@
 
 We first look at an in-depth breakdown of the composition of the binary of the underlying QUIC implementation.
 As previously established, hardware constrained devices do not have much space for firmware; hence, identifying sections of the QUIC stack that can be trimmed down or eliminated entirely is essential.
-In order to get a breakdown of the binary we have used the $cargo-bloat$~\footnote{cargo-bloat - \url{https://lib.rs/crates/cargo-bloat}} utility.
 
 [figure of results here]
 
 [discussion of results here]
-
-In order to reduce the binary size we opt to use the method established by~\citet{eggert_towards_2020} as recreating these steps may show a general framework for reducing binary sizes for hardware constrained devices.
-Notably, our application already handles client and server code separately; the MQTT broker requires a different binary to the MQTT client.
-
-Hence, the steps we have taken are as follows:
-
-\begin{itemize}
-    \item Compile the binary for a 32-bit target by setting the $target$ flag in cargo to $i686-unknown-linux-gnu$.
-    \item Remove any error handling code beyond what is needed for the binary to compile.
-    \item Remove any code that writes to standard output.
-\end{itemize}
 
 The resulting binary sizes after these steps can be found in Figure TBA.
 

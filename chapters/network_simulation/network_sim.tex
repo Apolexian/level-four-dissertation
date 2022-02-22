@@ -1,8 +1,12 @@
-\chapter{Network simulation} \label{chap:net_sim}
+\section{Network performance experiment design} \label{chap:net_sim}
 
+We now discuss the methodology for the performance portion of the implementation evaluation.
+That is, this section focuses on evaluating MQuicTT against the base $rumqtt$ implementation.
+
+The critical consideration for this design is the scenarios in which IoT devices are used.
 When evaluating the network performance of the implementations, we considered two options: using real IoT devices or using a network simulation tool.
 Due to technical limitations that came with using real devices, such as not being able to access the router of our network, we opted for simulation.
-In this chapter, we will discuss how we used Mininet~\citep{lantz_mininet_2021}, a realistic virtual network, in our evaluation.
+In this section, we will discuss how we used Mininet~\citep{lantz_mininet_2021}, a realistic virtual network, in our evaluation.
 
 Mininet is a tool that network developers and researchers can use to create software-defined networks (SNDs) using the $OpenFlow$ standard.
 
@@ -14,7 +18,7 @@ Mininet is a tool that network developers and researchers can use to create soft
 \end{figure}
 
 Using the Python API provided, we created the network topology shown in Figure~\ref{fig:mininet-topo}.
-The script takes several parameters to create the following scenarios:
+The script takes several parameters to create the following three scenarios:
 
 \begin{itemize}
     \item A synthetic scenario testing the limits of implementations.
@@ -23,6 +27,7 @@ The script takes several parameters to create the following scenarios:
 \end{itemize}
 
 The topology for all three scenarios remains the same - a minimum spanning tree of a typical IoT mesh network.
+When designing this topology, we needed it to reflect various realistic IoT scenarios.
 We can imagine this as a singular room in a home with all of its smart appliances being a cluster in the smart home or a cluster of 3D printers in a section of a farm in the 3D printer farm.
 The critical feature of this topology is that many clusters are connected to a central broker that controls the topology, hence creating a dumbbell structure.
 The full definition of this topology can be found in Appendix~\ref{appendix:topo}.
@@ -65,8 +70,11 @@ Hence, the data are best estimates, cross-validated through the different source
 In the case of the smart home scenario, as presented in Table~\ref{tab:links:home}, we expect that our packet loss rates are accurate as these, as previously stated, do appear in the home broadband reports and other studies.
 In the case of the 3D printer, as presented in Table~\ref{tab:links:3d} farm scenario, due to the number of machines and the interference these cause in a 3D printer farm, we modelled this scenario to have more packet loss.
 We specifically chose this scenario to test the benefits that QUIC should receive in an environment with high packet loss.
-However, we found it difficult to find exact data on packet loss percentages in smart factories or workshops; hence, we had to 
-estimate these.
+However, we found it difficult to find exact data on packet loss percentages in smart factories or workshops; hence, we expect a margin of error on some of the values.
+
+In general, we can assume that the packet loss rates will increase by some constant factor across all links.
+Hence, we have also created a synthetic scenario with extreme packet loss as presented in Table~\ref{tab:links:synth}.
+If the protocol performs well for an extreme scenario, we can expect it to also perform well for packet loss percentages up to that scenario.
 
 \begin{table}[ht]
     \caption{The parameters chosen for each link simulation in Mininet in the 3D printer farm scenario. The data assumes a typical IoT setup where most devices are within local geographical proximity. That is, the devices are communicating with each other within the range of one factory or site, with only the central node communicating with some server.}\label{tab:links:3d}
@@ -84,10 +92,6 @@ estimate these.
     \end{tabular}
 \end{table}
 
-Therefore, giving an error margin on these percentages is also difficult.
-This uncertainty is why we chose to present a synthetic scenario with extreme packet loss as presented in Table~\ref{tab:links:synth}.
-If the protocol performs well for an extreme scenario, we can expect it to also perform well for packet loss percentages up to that scenario.
-
 \begin{table}[ht]
     \caption{The parameters chosen for each link simulation in Mininet in the synthetic scenario. Here we opt for extreme packet loss scenarios to test the boundaries of the protocols. We opted for 20 times the normal packet loss that the link can expect in each case. We have also tested this for higher values however all protocol implementations greatly suffered in performance beyond this.}\label{tab:links:synth}
     %\tt 
@@ -104,10 +108,22 @@ If the protocol performs well for an extreme scenario, we can expect it to also 
     \end{tabular}
 \end{table}
 
-We evaluated MQuicTT's performance using the presented topologies and respective simulation parameters.
+We evaluate MQuicTT's performance using the presented topologies and respective simulation parameters in the following way.
+Each protocol transmits 100 messages from a client to a broker for each data link.
+
+During this, we measure the following:
+
+\begin{itemize}
+    \item The time taken for the underlying transport protocol to establish a connection.
+    \item The connection time. That is, the time before MQTT can send its first data packet.
+    \item The time taken to transmit the message to the broker.
+\end{itemize}
+
+This is repeated 10 times, and the average transmission time is taken to ensure accurate results.
+This process is repeated for all three testing scenarios.
+
 In general, MQTT allows for messages with a maximum size of approximately 260MB.
 However, this is a huge message, and most publicly deployed brokers reject it, so we created a representative message for each use case.
-
 Each topic in MQTT consists of a hierarchy of topic levels separated by a forward slash.
 For example, in a smart home scenario, we may have a topic like $home/groundfloor/kitchen/temp$ to control the temperature in the kitchen via a smart thermostat.
 A topic may also include a wildcard.

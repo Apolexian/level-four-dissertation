@@ -3,51 +3,28 @@
 % reset page numbering. Don't remove this!
 \pagenumbering{arabic} 
 
-The Internet of Things (IoT) is rapidly becoming the largest form of computation, with the number of IoT devices projected to surpass 75 billion by 2025~\citep{statista_number_2016}.
+The Internet of Things (IoT) is rapidly becoming the most prominent form of computation, with the number of IoT devices projected to surpass 75 billion by 2025~\citep{statista_number_2016}.
 IoT devices range from daily consumer gadgets such as wearables to sensors that are used in smart factories.
 The central theme of these devices is network connectivity.
-Network firmware installed on these devices has to be performant enough to be able to send and receive massive amounts of data. 
-Additionally, the nature of IoT devices puts constraints on the firmware that can be installed on them.
-Hence, the need for efficient, lightweight network firmware often means that manufacturers of these devices forego security for smaller hardware footprints~\cite{ling_iot_2018}.
+Network firmware installed on these devices has to be performant enough to send and receive massive amounts of data. 
+Hence, the need for efficient, lightweight network firmware often means that manufacturers of these devices forego security for performance~\cite{ling_iot_2018}.
+Therefore, the mass use of devices that are manufactured without security in mind creates a situation where many devices that are critical to infrastructure become vulnerable to cyber attacks, as seen in the 2015 attack on the Ukraine power grid~\citep{Liang2017}.
+However, we can not just employ the usual methods to secure firmware on these devices due to the presented constraints in terms of their physical size, power consumption needs and available hardware.
+Hence, there is a need to develop methods for secure, performant communication for this device class.
 
 MQTT~\citep{oasis_mqtt_2014} is a popular message-passing network protocol designed to be lightweight for the IoT use case.
+While certain protocols have been developed to specifically act as data transfer protocols for IoT devices, MQTT remains the most widely used.
 MQTT's design ensures that the protocol's implementations have a small code footprint and take up minimal network bandwidth.
-Importantly, MQTT relies on a transport layer protocol to send data and ensure secure communication.
+Significantly, MQTT relies on a transport layer protocol to send data and ensure secure communication.
 The standard in current MQTT implementations is to use the TCP/TLS stack to provide secure data transfer.
+As we present in this work, this stack adds overhead, which means that the advantages of MQTT are negated if we need secure communication.
 However, QUIC~\citep{iyengar_quic_2021}, a new transport layer network protocol initially designed at Google, is set to succeed TCP with a number of improvements.
 
-QUIC boasts advantages in both secure communication and performance.
-Hence, we introduce MQuicTT - a QUIC port of an MQTT library in the rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges that IoT presents for network protocols.
-
-\section{Problem statement}
-
-Secure transport protocols are critical to ensure secure communication in networked systems.
-IoT applications require these protocols to be performant and lightweight due to the resource constraints of IoT devices.
-The TCP/TLS stack often fails to satisfy these requirements due to performance and hardware footprint overhead.
-Hence, we aim to achieve performance and security for hardware constrained devices by using QUIC as the transport layer protocol for MQTT.
-
-\section{Objectives}
-
-In order to achieve our aim, we have identified the following objectives using a MoSCoW style analysis:
-
-\begin{itemize}
-    \item Must:
-    \begin{itemize}
-        \item We \textbf{must} identify the underlying QUIC and MQTT implementations that we can use for MQuicTT.
-        \item We \textbf{must} create an intermediate API for the QUIC implementation that has a similar interface to existing TCP socket implementations.
-        \item We \textbf{must} create MQuicTT from the resulting intermediate API and the chosen MQTT library.
-        \item We \textbf{must} analyse the performance of MQuiTT compared to other popular MQTT implementations.
-        \item We \textbf{must} create realistic testing scenarios.
-    \end{itemize}
-    \item Should:
-    \begin{itemize}
-        \item We \textbf{should} analyse a general methodology for reducing the hardware footprint of transport layer protocols for IoT.
-        \item We \textbf{should} analyse the hardware footprint and feature set of TLS.
-    \end{itemize}
-    \begin{itemize}
-        \item We \textbf{could} create a QUIC extension that uses a lightweight security protocol.
-    \end{itemize}
-\end{itemize}
+QUIC boasts advantages in both secure communication and performance. 
+Expanding the range of hardware constrained devices that MQTT can support would also work towards standardising messaging protocols for IoT devices.
+As we will demonstrate in further sections, many of the available protocols rely on the same fundamentals, and it may not be desirable to support all of these.
+Hence, we introduce MQuicTT - a QUIC port of an MQTT library in the Rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges IoT presents for network protocols.
+We further analyse the steps needed to create protocols for hardware constrained devices and present an analysis for the methodology of lowering the overhead of a QUIC stack.
 
 \section{Dissertation Outline}
 

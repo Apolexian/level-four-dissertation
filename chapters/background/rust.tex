@@ -13,7 +13,7 @@ While this example is relatively trivial, these bugs are often tough to debug in
 This issue does not only exist in codebases and organisations with low resources; at the BlueHat security conference, Microsoft researcher~\cite{miller_msrc-security-research2019_02_2019} presented that Microsoft targets roughly 70\% of their yearly patches at fixing memory safety bugs.
 On the other hand, the analogous Rust code will not compile due to the ownership system, mitigating this issue altogether.
 
-\begin{lstlisting}[language=C, float, caption={An example of a use after free in C code. This is an incorrect use of dynamic memory management, however it compiles. In large, complex code bases, missing bugs such as these often happens and can cause exploitable security issues.}, label=lst:C]
+\begin{lstlisting}[language=C, caption={An example of a use after free in C code. This is an incorrect use of dynamic memory management, however it compiles. In large, complex code bases, missing bugs such as these often happens and can cause exploitable security issues.}, label=lst:C]
     void bar() {
         int *ptr = (Point *) malloc(sizeof(int));
         free (ptr);
