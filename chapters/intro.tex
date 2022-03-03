@@ -16,14 +16,25 @@ MQTT~\citep{oasis_mqtt_2014} is a popular message-passing network protocol desig
 While certain protocols have been developed to specifically act as data transfer protocols for IoT devices, MQTT remains the most widely used.
 MQTT's design ensures that the protocol's implementations have a small code footprint and take up minimal network bandwidth.
 Significantly, MQTT relies on a transport layer protocol to send data and ensure secure communication.
-The standard in current MQTT implementations is to use the TCP/TLS stack to provide secure data transfer.
-As we present in this work, this stack adds overhead, which means that the advantages of MQTT are negated if we need secure communication.
+The standard in current MQTT implementations is to use TLS to provide secure data transfer.
+As we present in this work, this adds overhead, which means that the advantages of MQTT are negated if we need secure communication.
 However, QUIC~\citep{iyengar_quic_2021}, a new transport layer network protocol initially designed at Google, is set to succeed TCP with a number of improvements.
 
-QUIC boasts advantages in both secure communication and performance. 
-Expanding the range of hardware constrained devices that MQTT can support would also work towards standardising messaging protocols for IoT devices.
-As we will demonstrate in further sections, many of the available protocols rely on the same fundamentals, and it may not be desirable to support all of these.
-Hence, we introduce MQuicTT - a QUIC port of an MQTT library in the Rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges IoT presents for network protocols.
+QUIC boasts advantages in both secure communication and performance by eliminating several overheads of TCP such as head of line blocking and requiring a much simpler handshake to establish a secure connection.
+
+Hence, to take advantage of the developments made in the transport protocol space, the research questions that we answer in this work are as follows:
+
+\begin{itemize}
+    \item Can we show that TLS adds major overhead to the protocol stack?
+    \item Can we develop an MQTT implementation that uses QUIC at the transport layer?
+    \item Does an MQTT implementation using QUIC perform better than the TCP/TLS baseline?
+    \item Is an implementation of MQTT using QUIC lightweight enough to be deployed on IoT devices?
+    \item Can we trim down the QUIC stack further to reduce the overhead for IoT devices?
+    \item Are there possible alternatives to TLS that we can use to reduce overhead for IoT devices?
+\end{itemize}
+
+To do so we introduce MQuicTT - a QUIC port of an MQTT library in the Rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges IoT presents for network protocols.
+We show that $MQuicTT$ is more resilient than our baseline comparison in environments with high packet loss and congestion.
 We further analyse the steps needed to create protocols for hardware constrained devices and present an analysis for the methodology of lowering the overhead of a QUIC stack.
 
 \section{Dissertation Outline}
@@ -31,10 +42,10 @@ We further analyse the steps needed to create protocols for hardware constrained
 The rest of this dissertation is structured as follows:
 \begin{itemize}
     \item Chapter~\ref{chap:back} provides a background on the recent developments in the transport layer network protocol space, IoT and the Rust programming language.
-    \item Chapter~\ref{chap:libs} provides a rationale for the implementations of QUIC and MQTT that were chosen for MQuicTT.
-    \item Chapter~\ref{chapter:quic_socket} details the implementation of $QuicSocket$ - an intermediate QUIC API that we have developed.
+    \item Chapter~\ref{chap:reqs} presents the requirements that were set to answer our reserach questions and the design of the experiments that we have used for the analysis stage.
+    \item Chapter~\ref{chap:impl} details the implementation of $MQuicTT$ and $QuicSocket$ - an intermediate QUIC API that we have developed. This chapter also presents a discussion of the choices made during implementation and the difficulties that we circumvented.
     \item Chapter~\ref{chap:net_sim} gives an explanation of our methodology for the analysis that follows in later chapters.
-    \item Chapter~\ref{chapter:eval} details the analysis of MQuicTT and provides a discussion of results.
+    \item Chapter~\ref{chapter:eval} details the analysis of $MQuicTT$ and provides a discussion of results.
     \item Chapter~\ref{chap:TLS} discusses the pros and cons of TLS as a security protocol for IoT.
     \item Finally, Chapter~\ref{chap:conclusion} concludes and summarises important results.
 \end{itemize}
