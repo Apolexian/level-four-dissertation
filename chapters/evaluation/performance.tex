@@ -1,9 +1,26 @@
-\section{MQTT/QUIC performance comparison}
+\section{Data transmission comparison}
 
-We next evaluate the performance of MQuicTT compared to other popular MQTT implementations.
-To do so, we have used the scenarios as described in Chapter~\ref{chap:net_sim} and have transmitted the message 100 times for each scenario.
-The results of this experiment can be found in Figure TBA.
+We next evaluate the time it took both implementations to transmit the aforementioned MQTT messages.
+To do so, we have used the previously described methodology.
 
-[Figure here]
+Based on the analysis of connection time and the previous discussion, we hypothesise that:
+
+\begin{itemize}
+    \item \textbf{H1}: $MQuicTT$ performs on-par with $rumqtt$ in the IoT home scenario but does not present a significant difference.
+    \item \textbf{H2}: $MQuicTT$ performs significantly better than $rumqtt$ in the printer farm scenario.
+    \item \textbf{H3}: $MQuicTT$ can transmit all the messages on all data links in the synthetic scenario, whereas $rumqtt$ is not.
+\end{itemize}
+
+Figure~\ref{fig:comm_time} shows the results of this experiment.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\linewidth]{images/analysis_comm_time.png}
+    \caption{The time it took for the implementations to transmit the MQTT messages.
+        The base $rumqtt$ implementation is shown in green and $MQuicTT$ in orange.
+        Each column represents a scenario, and each row is a data link.
+        The time for each Figure is shown in milliseconds. The base implementation of $rumqtt$ could not transmit data in the synthetic packet loss scenario.}
+    \label{fig:comm_time}
+\end{figure}
 
 [Discussion here]

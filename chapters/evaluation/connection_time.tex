@@ -1,9 +1,10 @@
 \section{Connection time comparison} \label{sec:conn_time}
 
 In this section of the analysis, we focus on connection time.
-By connection time, we mean two things: the time it takes for the underlying transport protocol to establish a secure connection and the total time taken before MQTT sends its first data packet.
+By connection time, we mean the time it takes for the underlying transport protocol to establish a secure connection.
+For this analysis, we have not considered connection re-establishment.
 
-Connection time is essential in IoT devices as many do not connect while idling.
+Connection time is essential in IoT devices as many do not keep a connection alive while idling.
 A device may opt not to be connected at all times to reduce energy consumption and computational power.
 The device will then establish a connection and transmit data whenever required.
 However, this means that some efficiency is lost if the connection has to be constantly re-established.
@@ -12,12 +13,41 @@ In an MQTT/TCP implementation, the standard way to extend the keep alive interva
 However, it has been shown that this method can lead to security vulnerabilities~\citep{vaccari_slowtt_2020,mileva_comprehensive_2021}.
 
 We have talked previously about QUIC having a less complex handshake and hence being able to establish a secure connection quicker than TCP/TLS.
-Hence, using QUIC in MQTT is a step closer to providing the needed efficiency while not having to use methods that may lead to vulnerabilities.
+Based on this, we hypothesise that:
 
-To measure the connection time we have began a communication via MQuicTT and the other MQTT implementations and captured it using $tcpdump$.
-We have then extracted the time between the start of the QUIC or TCP communication and the completion of the handshake, as well as the time before MQTT sends its first data packet.
-The results of this are shown in Figure TBA.
+\begin{itemize}
+    \item \textbf{H1}: $MQuicTT$ has a lower connection time across all scenarios.
+    \item \textbf{H2}: $MQuicTT$ is more resilient to packet loss i.e. as packet loss increases, $MQuicTT$ is affected less than the base $rumqtt$.
+\end{itemize}
 
-[Figure here]
+To measure the connection time, we have followed the previously described methodology.
+That is, we began a communication via MQuicTT and the other MQTT implementations and captured it using $tcpdump$.
+We have then extracted the time between the start of the QUIC or TCP communication and the handshake completion.
+The results of this are shown in Figure~\ref{fig:connection_time}.
 
-[Discussion here]
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\linewidth]{images/analysis_connection_time.png}
+    \caption{The time it took for the underlying transport protocol to establish a secure connection.
+    The base $rumqtt$ implementation is shown in green and $MQuicTT$ in orange.
+    Each column represents a scenario and each row a data link.
+    The time for each figure is shown in milliseconds. The base implementation of $rumqtt$ could not establish a connection in the synthetic packet loss scenario.}
+    \label{fig:connection_time}
+\end{figure}
+
+Based on these results, we can see that $MQuicTT$ does not present any advantage in the IoT home scenario.
+Its connection time is on-par in the cases of ethernet and Zigbee, and considerably slower than the base $rumqtt$ in the case of 3g, 4g and WiFi.
+Although $MQuicTT$ performs better than $rumqtt$ in other scenarios, these results do not support hypothesis \textbf{H1} and indicate that $MQuicTT$ does not connect faster in all scenarios.
+This could perhaps be attributed to QUIC potentially performing worse in low bandwidth environments as discussed by~\citet{Nepomuceno2018}.
+The authors attribute QUIC's worse performance to the current infrastructure being optimised to work with existing transport protocols and the relative immaturity of QUIC.
+However, it is unclear if this would affect results from our test bench based on an SDN.
+
+On the other hand, we can see that the results support \textbf{H2} as $MQuicTT$ connects faster than the base implementation in scenarios with high packet loss.
+In fact, the base implementation did not manage to establish a connection in the synthetic scenario for any data link except ethernet.
+By not being able to establish a connection, we mean that the timeout value of the protocol would have to be increased, so the communication can no longer be considered performant in this case.
+In the case of the printer farm scenario, $MQuicTT$ outperformed the base implementation across all data link layers.
+We can also see that the most significant benefit of using $MQuicTT$ comes from using it in less reliable scenarios.
+This follows logically from QUIC's better handling of packet loss.
+
+In summary, in scenarios with requirements for performance, high packet loss and network congestion, $MQuicTT$ presents better results in terms of connection time and provides better resilience to extreme packet loss values.
+However, it may be better to use current implementations for networks that do not experience high packet loss and congestion.
