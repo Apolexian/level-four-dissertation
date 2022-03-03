@@ -23,4 +23,19 @@ Figure~\ref{fig:comm_time} shows the results of this experiment.
     \label{fig:comm_time}
 \end{figure}
 
-[Discussion here]
+We can see that the results support hypothesis \textbf{H1}.
+That is,  $MQuicTT$ performs almost identically to $rumqtt$ across all data links for the IoT home scenario.
+In fact, $MQuicTT$ actually performs marginally better than $rumqtt$ in this scenario with the transmission time of $MQuicTT$ being on average $2.02\%$ lower than that of $rumqtt$.
+From this we can see that $MQuicTT$ presents no disadvantages in terms of transmission time even in network with low packet loss and congestion.
+
+Hypothesis \textbf{H2} however is not supported.
+The performance advantage in terms of transmission time for $MQuicTT$ in the printer farm scenario is almost identical to that of the smart home scenario.
+On average, $MQuicTT$ transmits the data $2.36\%$ faster than $rumqtt$ and although this is an improvement, it is comparable to the improvement in the IoT home scenario.
+
+The result means that the presented use-case does not present a high enough packet loss percentage for $MQuicTT$ to have a significant advantage.
+This can be verified by looking at the synthetic scenario, which validates hypothesis \textbf{H3}.
+In the synthetic scenario only $MQuicTT$ managed to transmit the data on all data links and transmitted the data $13.8\%$ faster using ethernet.
+Hence, in environments that may experience extreme data loss, $MQuicTT$ presents a clear advantage, however, finding such a scenario may be difficult.
+
+Overall, $MQuicTT$ transmitted the data faster than $rumqtt$ across all scenarios and has shown to be more resilient against high packet loss.
+It may however be ineffective overhead to migrate existing deployments to it due to the marginal benefits in low congestion environments.
