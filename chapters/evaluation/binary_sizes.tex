@@ -37,7 +37,7 @@ We can see that in the case of the broker, the QUIC stack constitutes $32.9\%$ o
 Similarly to the client, the $regex$ crate again shows a large binary size footprint, and the lesser crates contribute to a sizeable cumulative amount.
 Additionally, similarly to the results presented for the client, we have found that the logging and error checking crates have not contributed largely to the binary size.
 
-\begin{figure}[bt]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{images/mquictt_binary_broker.png}
     \caption{Top contributions to the binary size of the MQuicTT broker by crate. That is, which libraries contribute the largest footprint.}
@@ -48,7 +48,7 @@ We have further analysed the binary to see which methods contribute to the size 
 Notably, in both cases, the $quinn\_proto$ module of $quinn$ contains several methods such as $connection::Connection::process\_payload$ and $endpoint::Endpoint::handle$ that each contribute around $0.8\%$.
 Notably, however, the $regex::exec::ExecBuilder::build$ method from the $regex$ crate contributes $0.7\%$, which is a larger contribution than $quinn's$ methods for decrypting packets and polling for connections.
 
-\begin{figure}[bt]
+\begin{figure}
     \begin{center}
         \begin{subfigure}[b]{0.6\textwidth}
             \includegraphics[width=1\linewidth]{images/quinn_binary_reduce_client.png}
