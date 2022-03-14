@@ -3,34 +3,51 @@
 We next evaluate the time it took both implementations to transmit the aforementioned MQTT messages.
 To do so, we have used the previously described methodology.
 That is, we have transmitted the MQTT messages shown in~\ref{appendix:mqtt_message} for their respective scenario and have measured the total time taken for the transmission to occur.
-We have repeated this and taken the average of the results to ensure that they are representative.
 
-Based on the analysis of connection time and previous discussions, we hypothesise that:
+Figure~\ref{fig:comm_time_home} shows the results for the data transmission in the IoT home scenario.
+We can see that MQuicTT performs comparably to the base $rumqtt$ implementation.
+$MQuicTT$ performs better in the cases of 3g, 4g and WiFi, and loses out to the base implementation in Zigbee and ethernet.
+The difference however is not substantial and we can see from the variance that the implementations are comparable in performance.
+Notably, $MQuicTT$ experiences higher variance which may imply that it is more affected by changes in the simulation environment between tests, while the base implementation is more consistent.
+Overall, in this scenario, $MQuicTT$ performs on par with the TCP implementation, however it also presents no advantage in terms of performance.
 
-\begin{itemize}
-    \item \textbf{H1}: $MQuicTT$ performs on-par with $rumqtt$ in the IoT home scenario but does not present a significant difference.
-    \item \textbf{H2}: $MQuicTT$ performs significantly better than $rumqtt$ in the printer farm scenario.
-    \item \textbf{H3}: $MQuicTT$ can transmit all the messages on all data links in the synthetic scenario, whereas $rumqtt$ is not.
-\end{itemize}
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{images/analysis_comm_time_home.png}
+    \caption{The time it took for the implementations to transmit the MQTT messages in the IoT home scenario.
+        The time for each plot   is shown in seconds.
+        We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
+    \label{fig:comm_time_home}
+\end{figure}
 
-Figure~\ref{fig:comm_time} shows the results of this experiment.
+Figure~\ref{fig:comm_time_farm} shows the results for the printer farm scenario.
+As previously discussed, this scenario presents higher packet loss to simulate the kind of congestion a link may experience in an industrial IoT application.
+From the results we can see that $MQuicTT$ again performs on par with the base implementation.
+We can also see that $MQuicTT$ experiences more variance in this scenario too.
+The theoretical advantage that the QUIC protocol may provide in environments with high packet loss does not seem to be demonstrated in this scenario.
+This is perhaps due to the packet loss not being extreme enough for QUIC to show advantage.
+Overall, the implementations again perform comparably.
 
-We can see that the results support hypothesis \textbf{H1}.
-That is,  $MQuicTT$ performs almost identically to $rumqtt$ across all data links for the IoT home scenario.
-In fact, $MQuicTT$ actually performs marginally better than $rumqtt$ in this scenario with the transmission time of $MQuicTT$ being on average $2.02\%$ lower than that of $rumqtt$.
-From this we can see that $MQuicTT$ presents no disadvantages in terms of transmission time even in network with low packet loss and congestion.
-For new deployments it would be advantages to use $MQuicTT$, however, for existing ones, it may not be advisable to migrate deployments.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{images/analysis_comm_time_farm.png}
+    \caption{The time it took for the implementations to transmit the MQTT messages in the printer farm scenario.
+        The time for each plot is shown in seconds.
+        We can see that the results are similar to the IoT home scenario.}
+    \label{fig:comm_time_farm}
+\end{figure}
 
-Hypothesis \textbf{H2} however is not supported.
-The performance advantage in terms of transmission time for $MQuicTT$ in the printer farm scenario is almost identical to that of the smart home scenario.
-On average, $MQuicTT$ transmits the data $2.36\%$ faster than $rumqtt$ and although this is an improvement, it is comparable to the improvement in the IoT home scenario.
-Hence, the results draw a similar conclusion to that of the IoT home scenario.
-It is still advantages to use $MQuicTT$ for new deployments.
+Hence, we now look at Figure~\ref{fig:comm_time_synth} which shows the results for the synthetic scenario.
+That is, the scenario with extreme packet loss.
+The results of this scenario echo the previous ones.
+$MQuicTT$ performs as well as the base $rumqtt$ with the results for ethernet showing a performance increase in favour of the QUIC implementation.
+Notably, we can see that in this scenario, both implementations experienced greater variance in measurements.
+Overall, $MQuicTT$ performed as well as the base implementation in each scenario, however, it also presented no performance improvement.
 
-The results of the printer farm scenario show that the presented use-case does not present a high enough packet loss percentage for $MQuicTT$ to have a significant advantage.
-This can be verified by looking at the synthetic scenario, which validates hypothesis \textbf{H3}.
-In the synthetic scenario only $MQuicTT$ managed to transmit the data on all data links and transmitted the data $13.8\%$ faster using ethernet.
-Hence, in environments that may experience extreme data loss, $MQuicTT$ presents a clear advantage, however, finding such a scenario may be difficult.
-
-Overall, $MQuicTT$ transmitted the data faster than $rumqtt$ across all scenarios and has shown to be more resilient against high packet loss.
-It may however be ineffective overhead to migrate existing deployments to it due to the marginal benefits in low congestion environments.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{images/analysis_comm_time_synth.png}
+    \caption{The time it took for the implementations to transmit the MQTT messages in the printer farm scenario.
+        The time for each plot is shown in seconds.}
+    \label{fig:comm_time_synth}
+\end{figure}
