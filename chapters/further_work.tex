@@ -1,0 +1,51 @@
+\chapter{Future work} \label{chap:future_work}
+
+This section will address the limitations of the work that we have done and discuss future work that would improve or expand upon the topic.
+Each section will present a direction for further work and a discussion of it.
+
+\section{QUIC implementations}
+
+The number of available QUIC implementations has already far surpassed the number of major TCP implementations that are used in deployments.
+Even during the course of this work being produced, a new Rust QUIC implementation was made public - Amazon's $s2n-quic$~\footnote{\url{https://github.com/aws/s2n-quic}}.
+The number of QUIC implementations and the difference in direction compared to TCP has several implications on this work.
+
+Firstly, a new more efficient implementation of Rust could be developed that would be a better fit as the base implementation for $MQuicTT$.
+Hence, new implementations would need to be analysed.
+
+Secondly, each new implementation means that many servers will have to interface with differing implementations, often with different implementation semantics.
+An analysis of how different QUIC implementations perform in conjunction with each other could provide different efficiency statistics to the ones presented in our analysis.
+That is, both our broker and clients used $Quinn$ and it would be interesting to analyse if using, for example, $Quinn$ for the broker and $s2n-quic$ for the client, impacts performance.
+
+Additionally, with so many implementations having to interface with each other, it would be worthwhile to analyse the number of bugs in QUIC deployments compared to TCP ones.
+
+\section{Binary analysis}
+
+As discussed, all binary analysis for this work was conducted manually.
+This task is rather tedious and error prone.
+While it is possible to create a dependency analyser and a decompiler to analyse the binaries, it is currently impossible to connect this automatically with different features of a protocol.
+
+For this to be possible we would need to augment protocol implementations with some sort of indication of a feature.
+In the Rust programming language this could be done via a macro.
+For example, a function with the macro $\#[feature(VersionNegotation)]$ could be used to indicate Quic's version negotiation feature.
+This method, however, can be viewed as quite restrictive as it essentially enforces a by-feature abstraction.
+As we have seen in $Quinn$, this is not always the way developers want to write their code.
+
+Hence, to be able to conduct this sort of analysis we would need to find an nonintrusive way of augmenting implementations with such details.
+
+\section{Comparison analysis to CoAP}
+
+We have previously discussed the similarities between using QUIC for MQTT and using CoAP.
+Both methods utilise UDP and an HTTP style messaging approach.
+Additionally, both provide retalitevly low code overhead, which is important for hardware constrained devices.
+
+While this work did not focus on the comparison of $MQuicTT$ to CoAP, such an analysis would be crucial to understanding the performance of QUIC in IoT.
+An additional avenue of future work is extracting the core features that both these approaches share and analysing if they could be employed to make other protocols better for hardware constrained devices.
+The result of such work could create a general approach to creating protocols for IoT devices.
+
+\section{Improved test bench}
+
+There are several avenues that could be taken for improving the analysis test bench that we used.
+Firstly, a remote controller could be implemented for the mininet topology to be able to use an actual mesh topology, with cycles, instead of the minimum spanning tree one deployed for this work.
+This would also mean that different load balancing and routing options could be tested for the scenarios, to better replicate a realistic deployment.
+This would also mean that network failures, such as switches going offline, could be simulated programmatically.
+Naturally, a hardware test bench analysis would also improve any further work.

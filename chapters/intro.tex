@@ -9,8 +9,8 @@ The central theme of these devices is network connectivity.
 Network firmware installed on these devices has to be performant enough to send and receive massive amounts of data. 
 Hence, the need for efficient, lightweight network firmware often means that manufacturers of these devices forego security for performance~\cite{ling_iot_2018}.
 Therefore, the mass use of devices that are manufactured without security in mind creates a situation where many devices that are critical to infrastructure become vulnerable to cyber attacks, as seen in the 2015 attack on the Ukraine power grid~\citep{Liang2017}.
-However, we can not just employ the usual methods to secure firmware on these devices due to the presented constraints in terms of their physical size, power consumption needs and available hardware.
-Hence, there is a need to develop methods for secure, performant communication for this device class.
+However, we can not just employ the usual methods to secure firmware on these devices due to the presented constraints in terms of their physical size, power consumption needs and available hardware resources.
+Hence, there is a need to develop protocols for secure, performant communication for IoT devices.
 
 MQTT~\citep{oasis_mqtt_2014} is a popular message-passing network protocol designed to be lightweight for the IoT use case.
 While certain protocols have been developed to specifically act as data transfer protocols for IoT devices, MQTT remains the most widely used.
@@ -18,34 +18,28 @@ MQTT's design ensures that the protocol's implementations have a small code foot
 Significantly, MQTT relies on a transport layer protocol to send data and ensure secure communication.
 The standard in current MQTT implementations is to use TLS to provide secure data transfer.
 As we present in this work, this adds overhead, which means that the advantages of MQTT are negated if we need secure communication.
-However, QUIC~\citep{iyengar_quic_2021}, a new transport layer network protocol initially designed at Google, is set to succeed TCP with a number of improvements.
 
+There have recently been several developments in systems software that aim to succeed existing industry standards.
+QUIC~\citep{iyengar_quic_2021}, a new transport layer network protocol initially designed at Google, is set to succeed TCP with a number of improvements.
 QUIC boasts advantages in both secure communication and performance by eliminating several overheads of TCP such as head of line blocking and requiring a much simpler handshake to establish a secure connection.
+In addition to this, the Rust programming language is a memory-safe systems programming language that aims to succeed C.
+Rust is secure by design due to its type-system and still provides the needed efficiency due to its region-based memory management approach adding no real overhead.
 
-Hence, to take advantage of the developments made in the transport protocol space, the research questions that we answer in this work are as follows:
-
-\begin{itemize}
-    \item Can we show that TLS adds major overhead to the protocol stack?
-    \item Can we develop an MQTT implementation that uses QUIC at the transport layer?
-    \item Does an MQTT implementation using QUIC perform better than the TCP/TLS baseline?
-    \item Is an implementation of MQTT using QUIC lightweight enough to be deployed on IoT devices?
-    \item Can we trim down the QUIC stack further to reduce the overhead for IoT devices?
-    \item Are there possible alternatives to TLS that we can use to reduce overhead for IoT devices?
-\end{itemize}
+Hence, to take advantage of the developments made in the transport protocol and programming languages spaces we must analyse if a Rust implementation of QUIC can be a viable alternative to existing widely-deployed implementations.
 
 To do so we introduce MQuicTT - a QUIC port of an MQTT library in the Rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges IoT presents for network protocols.
-We show that $MQuicTT$ is more resilient than our baseline comparison in environments with high packet loss and congestion.
+We show that $MQuicTT$ is as performant as the baseline chosen TCP MQTT implementation in our testing scenarios.
 We further analyse the steps needed to create protocols for hardware constrained devices and present an analysis for the methodology of lowering the overhead of a QUIC stack.
+Finally, we analyse the libraries and features that contribute to the binary size of Rust implementations.
 
 \section{Dissertation Outline}
 
 The rest of this dissertation is structured as follows:
 \begin{itemize}
     \item Chapter~\ref{chap:back} provides a background on the recent developments in the transport layer network protocol space, IoT and the Rust programming language.
-    \item Chapter~\ref{chap:reqs} presents the requirements that were set to answer our reserach questions and the design of the experiments that we have used for the analysis stage.
+    \item Chapter~\ref{chap:reqs} presents the requirements that were set to answer our reserach questions and the design of the implementation of $MQuicTT$ and its ecosystem.
     \item Chapter~\ref{chap:impl} details the implementation of $MQuicTT$ and $QuicSocket$ - an intermediate QUIC API that we have developed. This chapter also presents a discussion of the choices made during implementation and the difficulties that we circumvented.
-    \item Chapter~\ref{chap:net_sim} gives an explanation of our methodology for the analysis that follows in later chapters.
-    \item Chapter~\ref{chapter:eval} details the analysis of $MQuicTT$ and provides a discussion of results.
-    \item Chapter~\ref{chap:TLS} discusses the pros and cons of TLS as a security protocol for IoT.
+    \item Chapter~\ref{chapter:eval} details the experiment design and analysis of $MQuicTT$ and provides a discussion of results.
+    \item Chapter~\ref{chap:future_work} discusses further work that would expand upon the presented body of work.
     \item Finally, Chapter~\ref{chap:conclusion} concludes and summarises important results.
 \end{itemize}

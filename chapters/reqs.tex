@@ -1,14 +1,12 @@
 \chapter{Requirements and design} \label{chap:reqs}
 
-The following section presents the identified objectives and the methodology we follow for the rest of the work.
+The following section presents the identified objectives and the methodology we follow for the implementation of $MQuicTT$.
 We discuss the steps we have taken to analyse the existing QUIC and MQTT implementations to motivate our choice of libraries.
-Additionally, we describe the test bench created for the network tests of the implementation and the methodology for its binary analysis.
-
-
+Additionally, we describe the design choices taken.
 
 \section{Requirements}
 
-In order to create analyse QUIC as a transport layer protocol for IoT, we have identified the following requirements using a MoSCoW style analysis:
+In order to analyse QUIC as a transport layer protocol for IoT, we have identified the following requirements using a MoSCoW style analysis:
 
 \begin{itemize}
     \item Must:
@@ -20,7 +18,7 @@ In order to create analyse QUIC as a transport layer protocol for IoT, we have i
     \item Should:
     \begin{itemize}
         \item We \textbf{should} analyse a general methodology for reducing the hardware footprint of transport layer protocols for IoT.
-        \item We \textbf{should} analyse the hardware footprint and feature set of TLS.
+        \item We \textbf{should} analyse the hardware footprint and feature set of the chosen QUIC and TLS libraries.
     \end{itemize}
     \item Could:
     \begin{itemize}
@@ -40,9 +38,10 @@ From these requirements, we have split the project into the following objectives
     \item \textbf{O7}: Analyse the features of TLS and possible alternatives.
 \end{itemize}
 
-Hence, the rest of this chapter is split into sections corresponding to the design for each objective.
+Hence, the rest of this chapter is split into sections corresponding to the design for the implementation centred objectives, that is, \textbf{O1}, \textbf{O2}, \textbf{O3}.
+The rest of the objectives are addressed in Chapter~\ref{chapter:eval}.
 
-\section{Design of implementation}
+\section{Design of the implementation}
 
 In this section, we present a comparison of existing QUIC and MQTT implementations that can be used as underlying libraries for MQuicTT.Additionally, we discuss the high-level design of MQuicTT and the approach we have taken when it comes to using existing libraries compared to creating new protocol implementations.
 
@@ -68,38 +67,3 @@ In the first stage, we create an abstraction around $quinn$ that acts as a socke
 In the second stage we use the resulting socket library to port $rumqtt$ to QUIC.
 
 Further discussion of specific technical choices that we have made during the implementation can be found in Chapter~\ref{chap:impl}.
-
-\input{chapters/network_simulation/network_sim.tex}
-
-\section{Binary size experiment design}
-
-The last section of this chapter describes how we have conducted further analysis on the binary size of the QUIC protocol that underlines MQuicTT.
-The focus of this section is to see if the QUIC stack contributes a significant overhead to MQuicTT's binary size and how we can reduce this overhead.
-We expect that the QUIC stack will contribute to the majority of the size of MQuicTT as MQTT itself is designed to have a low code size overhead.
-Hence, the first step of this part of the analysis will be to determine how much QUIC contributes to the binary size.
-
-In order to get a breakdown of the binary we have used the $cargo-bloat$~\footnote{cargo-bloat - \url{https://lib.rs/crates/cargo-bloat}} utility.
-The utility analyses the binary using custom ELF, DWARF and Mach-O parsers and disassembles the binary to look for references and links to anonymous data.
-Doing so creates a map of the binary that shows where every byte has a label attached to it.
-
-This utility provides the composition of a Rust binary. 
-However, it is not perfect and results in some margin of error.
-Unfortunately, this margin of error is also not easily measurable.
-By comparing the total size of the binary as reported by $cargo-bloat$ to the size reported by the operating system, we have deduced that the total error margin is within $1\%$ with good precision.
-This should mean that we can get a somewhat accurate error margin on the components. 
-However, it is also possible that the internal calculations are inaccurate despite the overall size being accurate.
-
-The next step in this stage will be analysing methods for trimming down the QUIC stack binary size.
-Hence, in this stage, we shift our focus to the binary produced by $QuicSocket$.
-To reduce the binary size, we opt to use the method established by~\citet{eggert_towards_2020} as recreating these steps may show a general framework for reducing binary sizes for hardware constrained devices.
-Notably, our application already handles client and server code separately; the MQTT broker requires a different binary to the MQTT client.
-
-Hence, the steps we take are as follows:
-
-\begin{itemize}
-    \item Compile the binary for a 32-bit target by setting the $target$ flag in cargo to $i686-unknown-linux-gnu$.
-    \item Remove any error handling code beyond what is needed for the binary to compile.
-    \item Remove any code that writes to standard output.
-\end{itemize}
-
-After every step, we record the difference in binary size made by the change using the same methodology.

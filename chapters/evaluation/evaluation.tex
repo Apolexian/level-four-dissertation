@@ -1,8 +1,62 @@
 \chapter{Analysis} \label{chapter:eval}
 
 This section presents the analysis results conducted using the previously described methodology.
-Each section presents the results, and a discussion follows.
+The analysis is broadly split into two stages: performance analysis and binary size analysis.
+The experiment design for the performance analysis can be found in Section~\ref{chap:net_sim}, and the experiment design for the binary analysis can be found in Section~\ref{sec:exp_bin}.
+The performance analysis is further split into a connection time analysis and a general transmission time analysis.
 
+\input{chapters/network_simulation/network_sim.tex}
 \input{chapters/evaluation/connection_time.tex}
 \input{chapters/evaluation/performance.tex}
+
+\section{Binary size experiment design} \label{sec:exp_bin}
+
+The last section of this chapter describes how we have conducted further analysis on the binary size of the QUIC protocol that underlines MQuicTT.
+The focus of this section is to see if the QUIC stack contributes a significant overhead to MQuicTT's binary size and how we can reduce this overhead.
+We expect that the QUIC stack will contribute to the majority of the size of MQuicTT as MQTT itself is designed to have a low code size overhead.
+Hence, the first step of this part of the analysis will be to determine how much QUIC contributes to the binary size.
+
+In order to get a breakdown of the binary we have used the $cargo-bloat$~\footnote{cargo-bloat - \url{https://lib.rs/crates/cargo-bloat}} utility.
+The utility analyses the binary using custom ELF, DWARF and Mach-O parsers and disassembles the binary to look for references and links to anonymous data.
+Doing so creates a map of the binary that shows where every byte has a label attached to it.
+
+This utility provides the composition of a Rust binary. 
+However, it is not perfect and results in some margin of error.
+Unfortunately, this margin of error is also not easily measurable.
+By comparing the total size of the binary as reported by $cargo-bloat$ to the size reported by the operating system, we have deduced that the total error margin is within $1\%$ with good precision.
+This should mean that we can get a somewhat accurate error margin on the components. 
+However, it is also possible that the internal calculations are inaccurate despite the overall size being accurate.
+
+The next step in this stage will be analysing methods for trimming down the QUIC stack binary size.
+Hence, in this stage, we shift our focus to the binary produced by $QuicSocket$.
+To reduce the binary size, we opt to use the method established by~\citet{eggert_towards_2020} as recreating these steps may show a general framework for reducing binary sizes for hardware constrained devices.
+Notably, our application already handles client and server code separately; the MQTT broker requires a different binary to the MQTT client.
+
+Hence, the steps we take are as follows:
+
+\begin{itemize}
+    \item Compile the binary for a 32-bit target by setting the $target$ flag in cargo to $i686-unknown-linux-gnu$.
+    \item Remove any error handling code beyond what is needed for the binary to compile.
+    \item Remove any code that writes to standard output.
+\end{itemize}
+
+After every step, we record the difference in binary size made by the change using the same methodology.
+
+Once this step is completed we further analyse the size of $Quinn$ and $Rustls$ using a by-function binary size breakdown.
+Using the $cargo-bloat$ utility we can get a list of the contribution of each function to the binary size and then assign each function to its respective protocol feature.
+
 \input{chapters/evaluation/binary_sizes.tex}
+
+\subsection{Summary}
+
+When discussing the possibility of using a Rust QUIC implementation as the transport layer protocol for network firmware in IoT devices we established that the QUIC implementation must perform at least as well as the baseline and have a binary size which can fit onto widely used IoT devices.
+
+From the above analysis we can conclude that $MQuicTT$ performs at least as well as the baseline TCP implementation of $rumqtt$.
+When it comes to connection time, $MQuicTT$ performs marginally better, and when it comes to total transmission time, the implementations are on par.
+Hence, this requirement is satisfied.
+
+In terms of binary size we have managed to reduce it to approximately $8Mb$.
+This size of binary would easily be installable on popular IoT devices such as the Raspberry Pi 3 Model B, Beagle Board or the Arduino Due.
+However, this size of binary would not support industrially-wide used chips such as the esp32.
+We have analysed the possible avenues of further reducing the binary size of $MQuicTT$ by addressing issues with the regex library and by analysing $Quinn$ and $Rustls$ by feature.
+Hence, overall, we can say that we have achieved creating an implementation that can be used on a large number of IoT devices, but not on ones with stricter hardware constraints.

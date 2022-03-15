@@ -1,8 +1,10 @@
 \begin{abstract}
-    The standard protocols used to provide secure communication - TCP and TLS, often fall short for hardware constrained devices due to latency, connection overhead, head of line blocking and large hardware footprints.
-    QUIC - a new transport layer protocol is set to succeed the TCP/TLS stack and is advantageous for performance and security by design.
-    Due to the popularity of MQTT, a lightweight IoT protocol, in this work, we present MQuicTT - a QUIC based implementation of the MQTT protocol.
-    We analyse the landscape of existing QUIC implementations that we considered to underlay MQuicTT, discuss our implementation of a socket API for QUIC and the implementation of MQuicTT itself.
-    We also compare the performance of the resulting solution with existing MQTT implementations in various use cases.
-    Finally, we find that TLS contributes a significant overhead to the binary size of QUIC implementations and discusses possible alternatives.
+    New advances in network systems and programming languages are set to succeed existing industry standards.
+    In the transport layer space, QUIC - a is set to succeed the TCP/TLS stack and is advantageous for performance and security by leveraging improved features such as a simpler, secure handshake, and streams.
+    While in the programming languages space, Rust, a new systems programming language, uses a strong type system to guarantee memory-safety and deadlock-freedom, while still being performant.
+    In this work we analyse the feasibility of using a Rust based QUIC implementation as the basis for secure communication in IoT devices.
+    To do so, in this work we develop $MQuicTT$ - a Rust based MQTT implementation using QUIC at the transport layer.
+    We compare the performance of the resulting solution with existing MQTT implementations in various use cases and analyse the hardware resources needed to deploy it.
+    We find that the performance of the implementation is on par with the baseline.
+    Finally, we discuss the binary size of the implementation and the possible methods to generally reduce Rust binary sizes for IoT network firmware using QUIC.
 \end{abstract}

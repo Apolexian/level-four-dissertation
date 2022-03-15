@@ -1,6 +1,6 @@
 \section{Network performance experiment design} \label{chap:net_sim}
 
-We now discuss the methodology for the performance portion of the implementation evaluation.
+We now discuss the analysis methodology for the performance portion of the implementation evaluation.
 That is, this section focuses on evaluating MQuicTT against the base $rumqtt$ implementation.
 
 The critical consideration for this design is the scenarios in which IoT devices are used.
@@ -115,11 +115,10 @@ During this, we measure the following:
 
 \begin{itemize}
     \item The time taken for the underlying transport protocol to establish a connection.
-    \item The connection time. That is, the time before MQTT can send its first data packet.
     \item The time taken to transmit the message to the broker.
 \end{itemize}
 
-This is repeated 10 times, and the average transmission time is taken to ensure accurate results.
+This is repeated several times to ensure that variance does not affect results.
 This process is repeated for all three testing scenarios.
 
 In general, MQTT allows for messages with a maximum size of approximately 260MB.
@@ -134,3 +133,7 @@ For example, the topic $home/secondfloor/kitchen/\#$ can be used to subscribe to
 Notably, brokers reserve topics for system messages starting with the \$ character.
 
 The chosen topic and the transmitted message for each scenario can be found in Appendix~\ref{appendix:mqtt_message}.
+The messages were devised based on an arbitrary command that may be issued to an IoT device present in the scenario.
+For the synthetic scenario we opted to use a message that is considerably longer, to test the limits of each implementation.
+This message simply consisted of a paylaod with a field replicated thousands of times.
+It has ben omitted from the Appendix due to being too long.

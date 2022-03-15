@@ -1,6 +1,6 @@
 \subsection{QUIC} \label{section:quic_impl}
 
-In this section, we compare the existing implementations of the QUIC protocol in the context of usability for IoT devices and present the reasoning behind our choice of QUIC library.
+We now compare the existing implementations of the QUIC protocol in the context of usability for IoT devices and present the reasoning behind our choice of QUIC library.
 We have considered the mainstream implementations in the C, C++, Rust and Go programming languages as these are the languages that can be considered systems languages and would thus be the most widely used ones for IoT devices.
 In addition to this, we did not consider implementations paired with a browser web engine as these would be impossible to use on hardware constrained devices.
 Hence, we did not include notable implementations such as the QUIC implementation of the chromium web engine~\citep{chromium_quic_2021} and $Neqo$~\citep{mozilla_neqo_2022}.
@@ -60,8 +60,8 @@ Out of these five, all C implementations supported OpenSSL, with the Go and Rust
 In the case of $quic-go$, this was the $crypto/tls$ package, and in the case of Rust, $rustls$.
 We can also see that the Rust implementations are not drastically different in binary footprint size.
 
-In terms of using a memory-safe language, although Go is described as memory safe, it does not opt for compile-time memory safety and instead uses the panic model.
-The panic model was the primary reason for the choice of Rust instead of Go, as Rust provides these guarantees using a robust type system.
+Notably, although Go is described as memory safe, it does not opt for compile-time memory safety and instead uses the panic model.
+The panic model is another advantage of Rust compared to languages such as Go, as Rust provides these guarantees using a robust type system.
 Between the two Rust implementations - Quinn and Quiche, we chose Quinn due to issues with the Quiche library.
 On the other hand, Quiche opts to make the user create a $mio$ event loop, which interfered with the $tokio$ runtime environment used in our chosen MQTT implementation discussed in the next section.
 In addition to this, we found that the Quinn API is easier to work with when creating the intermediate library discussed in Chapter~\ref{chapter:quic_socket}; for example, Quinn handles the QUIC handshake in the library and does not require the developer to create an event loop.
