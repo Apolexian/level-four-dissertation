@@ -12,7 +12,7 @@ The pointer is freed and then used in the print statement, resulting in undefine
 While this example is relatively trivial, these bugs are often tough to debug in a more extensive, more complex system, leading to security vulnerabilities.
 This issue does not only exist in codebases and organisations with low resources; at the BlueHat security conference, Microsoft researcher~\cite{miller_msrc-security-research2019_02_2019} presented that Microsoft targets roughly 70\% of their yearly patches at fixing memory safety bugs.
 On the other hand, the analogous Rust code will not compile due to the ownership system, mitigating this issue altogether.
-
+\newpage
 \begin{lstlisting}[language=C, caption={An example of a use after free in C code. This is an incorrect use of dynamic memory management, however it compiles. In large, complex code bases, missing bugs such as these often happens and can cause exploitable security issues.}, label=lst:C]
     void bar() {
         int *ptr = (Point *) malloc(sizeof(int));
@@ -21,7 +21,7 @@ On the other hand, the analogous Rust code will not compile due to the ownership
     }
 \end{lstlisting}
 
-\begin{lstlisting}[language=Rust, float, caption={A similar application in Rust will not compile due to the safety guaranteed by the ownership system. A borrow occurs when $example\_ref$ is assigned to point to $new\_example$, however the ownership system recognises that the borrowed value does not live long enough.}, label=lst:Rust]
+\begin{lstlisting}[language=Rust, caption={A similar application in Rust will not compile due to the safety guaranteed by the ownership system. A borrow occurs when $example\_ref$ is assigned to point to $new\_example$, however the ownership system recognises that the borrowed value does not live long enough.}, label=lst:Rust]
     fn bar() {
         let example = String::from("Example");
         let mut example_ref = &example;

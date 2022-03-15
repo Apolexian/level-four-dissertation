@@ -1,9 +1,9 @@
-\chapter{Future work} \label{chap:future_work}
+\section{Future work} \label{sec:future_work}
 
 This section will address the limitations of the work that we have done and discuss future work that would improve or expand upon the topic.
 Each section will present a direction for further work and a discussion of it.
 
-\section{QUIC implementations}
+\subsection{QUIC implementations}
 
 The number of available QUIC implementations has already far surpassed the number of major TCP implementations that are used in deployments.
 Even during the course of this work being produced, a new Rust QUIC implementation was made public - Amazon's $s2n-quic$~\footnote{\url{https://github.com/aws/s2n-quic}}.
@@ -18,7 +18,7 @@ That is, both our broker and clients used $Quinn$ and it would be interesting to
 
 Additionally, with so many implementations having to interface with each other, it would be worthwhile to analyse the number of bugs in QUIC deployments compared to TCP ones.
 
-\section{Binary analysis}
+\subsection{Binary analysis}
 
 As discussed, all binary analysis for this work was conducted manually.
 This task is rather tedious and error prone.
@@ -32,7 +32,7 @@ As we have seen in $Quinn$, this is not always the way developers want to write 
 
 Hence, to be able to conduct this sort of analysis we would need to find an nonintrusive way of augmenting implementations with such details.
 
-\section{Comparison analysis to CoAP}
+\subsection{Comparison analysis to CoAP}
 
 We have previously discussed the similarities between using QUIC for MQTT and using CoAP.
 Both methods utilise UDP and an HTTP style messaging approach.
@@ -42,7 +42,7 @@ While this work did not focus on the comparison of $MQuicTT$ to CoAP, such an an
 An additional avenue of future work is extracting the core features that both these approaches share and analysing if they could be employed to make other protocols better for hardware constrained devices.
 The result of such work could create a general approach to creating protocols for IoT devices.
 
-\section{Improved test bench}
+\subsection{Improved test bench}
 
 There are several avenues that could be taken for improving the analysis test bench that we used.
 Firstly, a remote controller could be implemented for the mininet topology to be able to use an actual mesh topology, with cycles, instead of the minimum spanning tree one deployed for this work.
