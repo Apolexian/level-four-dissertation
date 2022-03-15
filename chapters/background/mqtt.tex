@@ -1,7 +1,7 @@
 \section{MQTT}
 
 Considering the constraints that apply to IoT devices, we will now look at one of the widely used application-level IoT protocols.
-MQTT, originally standing for Message Queuing Telemetry Transport, is designed to be a lightweight protocol to transport messages between devices using the publish-subscribe method.
+MQTT~\citep{oasis_mqtt_2014}, originally standing for Message Queuing Telemetry Transport, is designed to be a lightweight protocol to transport messages between devices using the publish-subscribe method.
 MQTT defines two types of participants - the broker and the client.
 The broker is a server that receives messages from all clients and then routes these messages to the appropriate destinations.
 On the other hand, a client is just a device that runs an MQTT library and sends the broker messages.
@@ -111,7 +111,6 @@ Multiplexing will later play an essential role in our implementation of MQTT/QUI
 
 The first implementation of MQTT using QUIC presented by~\cite{kumar_implementation_2019} uses the $ngtcp2$ implementation of QUIC in the C programming language.
 The authors find that QUIC reduces the connection overhead time significantly and reduces the processor and memory usage.
-We present a comparison of these results to the ones obtained through the evaluation that we have conducted in chapter~\ref{chapter:eval}.
 
 Due to the authors' chosen underlying QUIC implementation, their API implementation requires its own message queue amongst other common functions such as key settlement.
 The QUIC implementation chosen for this project allows the library to handle some of this logic instead.

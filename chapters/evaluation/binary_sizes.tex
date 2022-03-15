@@ -1,6 +1,4 @@
-\section{Binary size breakdown} \label{sec:binary_sizes}
-
-\subsection{MQuicTT binary composition}
+\subsection{MQuicTT binary composition} \label{sec:binary_sizes}
 
 We first look at an in-depth breakdown of the MQuicTT binary and analyse the contribution to the QUIC stack.
 Figure~\ref{fig:mquictt_client_bin} shows the result of the binary breakdown by crate.
@@ -89,6 +87,13 @@ Notably, we can see that $Quinn$ heavily leverages a single state machine that h
 For example, version negotiation does not have its own function and is rather just part of the general connection handling.
 Connection migration also does not appear to have its own contribution.
 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/mquictt_binary_by_function.png}
+    \caption{A by-feature breakdown of the binary size contribution of $Quinn$ - the QUIC library used for $MQuicTT$. We can see that $Quinn$ heavily leverages the state machine, making the binary size reduction operation quite difficult.}
+    \label{fig:mquictt_bin_func}
+\end{figure}
+
 As a result, it is difficult to say how much exactly these features contribute to the overall size of the $MQuicTT$ binary.
 There are two possible ways to estimate this that we considered.
 Firstly, we could look at the number of lines of code and draw some conclusion from this.
@@ -102,17 +107,19 @@ In addition to this, removing this feature would not surmount to a substantial r
 
 Overall, from these results, we can see that the complexity of $QUIC$ in its state machine and handling of streams is the key reason for $Quinn$'s $16\%$ contribution to the size of $MQuicTT$'s binary.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.75\linewidth]{images/mquictt_binary_by_function.png}
-    \caption{A by feature breakdown of the binary size contribution of $Quinn$ - the QUIC library used for $MQuicTT$. We can see that $Quinn$ heavily leverages the state machine, making the binary size reduction operation quite difficult.}
-    \label{fig:mquictt_bin_func}
-\end{figure}
-
 Figure~\ref{fig:tls_bin_func} shows a similar breakdown for $Rustls$.
 As expected, the handshake logic contributes most to the size of the binary.
 The functions that contribute most to the handshake are the client and server hello handlers.
 As QUIC does not use the traditional TLS handshake it is possible to save space by stripping away the non-QUIC handshake semantics.
+It is hard to estimate how much exactly this would remove without making the changes, however, we can approximate this by removing handshake functions that QUIC would definitely not use.
+In our approximation, the contribution from the handshake could be reduced from $53\%$ to approximately $44\%$.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.75\linewidth]{images/rustls_binary_by_function.png}
+    \caption{A by-feature breakdown of the binary size contribution of $Rustls$ - the TLS library used for secure communication. Notably, the new QUIC extensions added to TLS contribute significantly to the binary size contribution.}
+    \label{fig:tls_bin_func}
+\end{figure}
 
 $Rustls$ also seems to have complex logic for interfacing with and picking cipher suites.
 The handling for this is a fifth of $Rustls$'s total binary size contribution.
@@ -123,18 +130,11 @@ Notably, QUIC extensions to $Rustls$ such as in-place encryption and QUIC key ge
 This again shows that if non-QUIC features were to be removed, then we could save on binary size.
 However, this is also shows quite a large overhead for applications that do not use QUIC.
 
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.75\linewidth]{images/rustls_binary_by_function.png}
-    \caption{A by feature breakdown of the binary size contribution of $Rustls$ - the TLS library used for secure communication. Notably, the new QUIC extensions added to TLS contribute significantly to the binary size contribution.}
-    \label{fig:tls_bin_func}
-\end{figure}
-
 In regards to further reductions to the binary size, the contributions made by the standard library include over a thousand functions of approximately the same size.
 As we have already removed features such as backtracing, demangling and error reporting, removing these would be risky to the core functionality and would need to be investigated manually.
 The most frequently appearing function is $std core::ptr::drop\_in\_place$, which is used by the compiler to execute the destructor of a pointed-to-value.
 
 Overall, the biggest effect to the reduction of the binary size of $MQuicTT$ came from compiling the binary in 32-bit only mode, removing error reporting and handling, and any standard output.
-A surprising result is the contribution of the regex library, which can be attributed to the fact that Rust opts to use utf-8 instead of ascii for strings.
+A surprising result is the contribution of the regex library, which can be attributed to the fact that Rust opts to use $utf-8$ instead of $ascii$ for strings.
 Reducing the binary size by removing QUIC features may not be the best approach due to limited gains.
 However, stripping away non-QUIC features from TLS may reduce the binary size considerably.

@@ -5,15 +5,20 @@ The analysis is broadly split into two stages: performance analysis and binary s
 The experiment design for the performance analysis can be found in Section~\ref{chap:net_sim}, and the experiment design for the binary analysis can be found in Section~\ref{sec:exp_bin}.
 The performance analysis is further split into a connection time analysis and a general transmission time analysis.
 
+\section{Performance experiment}
+
 \input{chapters/network_simulation/network_sim.tex}
 \input{chapters/evaluation/connection_time.tex}
 \input{chapters/evaluation/performance.tex}
+\newpage
+\section{Binary size experiment}
 
-\section{Binary size experiment design} \label{sec:exp_bin}
+\subsection{Binary size experiment design} \label{sec:exp_bin}
 
-The last section of this chapter describes how we have conducted further analysis on the binary size of the QUIC protocol that underlines MQuicTT.
+This section describes how we have conducted further analysis on the binary size of the QUIC protocol that underlines MQuicTT.
 The focus of this section is to see if the QUIC stack contributes a significant overhead to MQuicTT's binary size and how we can reduce this overhead.
 We expect that the QUIC stack will contribute to the majority of the size of MQuicTT as MQTT itself is designed to have a low code size overhead.
+Additionally, we have conducted a similar analysis for the TLS library used and expect that it also contributes a significant amount to the resulting binary size.
 Hence, the first step of this part of the analysis will be to determine how much QUIC contributes to the binary size.
 
 In order to get a breakdown of the binary we have used the $cargo-bloat$~\footnote{cargo-bloat - \url{https://lib.rs/crates/cargo-bloat}} utility.
@@ -55,7 +60,8 @@ From the above analysis we can conclude that $MQuicTT$ performs at least as well
 When it comes to connection time, $MQuicTT$ performs marginally better, and when it comes to total transmission time, the implementations are on par.
 Hence, this requirement is satisfied.
 
-In terms of binary size we have managed to reduce it to approximately $8Mb$.
+In terms of binary size we have managed to reduce it to approximately $8Mb$ from a starting point of $9.1Mb$, a reduction of $12.1\%$.
+We have also shown that the methods developed by~\citet{eggert_towards_2020} do translate to our implementation, implying that this could be a general methodology.
 This size of binary would easily be installable on popular IoT devices such as the Raspberry Pi 3 Model B, Beagle Board or the Arduino Due.
 However, this size of binary would not support industrially-wide used chips such as the esp32.
 We have analysed the possible avenues of further reducing the binary size of $MQuicTT$ by addressing issues with the regex library and by analysing $Quinn$ and $Rustls$ by feature.

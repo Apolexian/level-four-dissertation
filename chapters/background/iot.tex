@@ -1,7 +1,6 @@
 \section{The Internet of Things}
 
-It is hard to give a set criterion or definition for which devices qualify as IoT devices.
-Generally, an IoT device is a small chip that possesses some processing power and may have embedded sensors.
+There is no set definition for what constitutes an IoT device, however, generally, an IoT device is a small chip that possesses some processing power and may have embedded sensors.
 The key aspect of IoT devices is that they facilitate data exchange with other devices and systems over the Internet.
 The modern version of IoT can be attributed to\citepos{weiser_computer_1991} work on ubiquitous computing, although the term itself first appeared in a speech by Peter T. Lewis in 1985.
 IoT has applications in various fields, including smart home automation, healthcare, consumer applications, etc.
@@ -38,10 +37,10 @@ Efforts to classify the security issues in the IoT space~\citep{alaba_internet_2
 
 Insecure firmware in IoT devices comes from issues with firmware updates and general vulnerabilities stemming from code.
 A primary reason is that most programmers opt to create software for IoT devices in memory unsafe languages.
-Languages such as C provide the needed efficiency to circumvent processing constraints; however also leave room for memory management issues, leading to vulnerabilities.
-When it comes to privacy, a primary goal is ensuring data integrity and confidentiality.
+Languages such as C provide the needed efficiency to circumvent processing constraints; however they also leave room for memory management issues, leading to vulnerabilities.
+When it comes to privacy, the primary goal is ensuring data integrity and confidentiality.
 Data sent via the network must not be tampered with nor snooped on by third parties during communication.
-Man in the middle attacks is a prime concern for protocols such as MQTT due to their lack of self-imposed encryption.
+Man in the middle attacks are a prime concern for protocols such as MQTT due to their lack of self-imposed encryption.
 
 Hence, finding a way to circumvent the hardware constraints presented by IoT devices and still provide secure data transfer is paramount to the safe adoption of IoT.
 Additionally, opting to create IoT firmware code in a memory safe language may prevent vulnerabilities that are present on IoT devices from the moment of deployment.

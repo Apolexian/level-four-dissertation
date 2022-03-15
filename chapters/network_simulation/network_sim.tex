@@ -1,4 +1,4 @@
-\section{Network performance experiment design} \label{chap:net_sim}
+\subsection{Network performance experiment design} \label{chap:net_sim}
 
 We now discuss the analysis methodology for the performance portion of the implementation evaluation.
 That is, this section focuses on evaluating MQuicTT against the base $rumqtt$ implementation.
@@ -8,7 +8,7 @@ When evaluating the network performance of the implementations, we considered tw
 Due to technical limitations that came with using real devices, such as not being able to access the router of our network, we opted for simulation.
 In this section, we will discuss how we used Mininet~\citep{lantz_mininet_2021}, a realistic virtual network, in our evaluation.
 
-Mininet is a tool that network developers and researchers can use to create software-defined networks (SNDs) using the $OpenFlow$ standard.
+Mininet is a tool that network developers and researchers can use to create software-defined networks (SDNs) using the $OpenFlow$ standard.
 
 \begin{figure}[ht]
     \centering
@@ -28,16 +28,16 @@ The script takes several parameters to create the following three scenarios:
 
 The topology for all three scenarios remains the same - a minimum spanning tree of a typical IoT mesh network.
 When designing this topology, we needed it to reflect various realistic IoT scenarios.
+This topology is designed to demonstrate network congestion and fits all three scenarios, hence we do not need to change it.
 We can imagine this as a singular room in a home with all of its smart appliances being a cluster in the smart home or a cluster of 3D printers in a section of a farm in the 3D printer farm.
 The critical feature of this topology is that many clusters are connected to a central broker that controls the topology, hence creating a dumbbell structure.
 The full definition of this topology can be found in Appendix~\ref{appendix:topo}.
 The variables that the script changes between scenarios and simulations are the link's \textit{bandwidth}, \textit{delay} and the rate of \textit{packet loss}.
 
 The bandwidth of a link is the maximum rate of data transfer we can achieve.
-In contrast to bandwidth in signal processing, we measure bandwidth in bits per second rather than hertz in computer networking.
-The delay of a link specifies the latency of the link.
-It is the time that a bit of data takes to travel across a link. 
-We measure this in milliseconds.
+In contrast to bandwidth in signal processing, in computer networking we measure bandwidth in bits per second rather than hertz.
+The delay of a link specifies the latency of the link, i.e the time that a bit of data takes to travel across a link. 
+We measure this in milliseconds or seconds.
 Link delay corresponds to the geographical distance between the communicating parties; however, in the case of IoT, we can expect devices to be in local proximity.
 Lastly, the packet loss rate shows the percentage of corrupted or dropped packets in transit.
 Various protocols having to retransmit packets also adds to the delay of data transfer.
@@ -130,7 +130,7 @@ The topic string $home/groundfloor/+/temp$ includes a \textit{single-level} wild
 This would match the topic $home/groundfloor/lounge/temp$, but not match the topic $home/secondfloor/kitchen/temp$.
 If a client wishes to subscribe to multiple topics with the same prefix, a \textit{multi-level} wildcard may be used.
 For example, the topic $home/secondfloor/kitchen/\#$ can be used to subscribe to all topics with a prefix matching the string before the hash character.
-Notably, brokers reserve topics for system messages starting with the \$ character.
+In particular, brokers reserve topics for system messages starting with the \$ character.
 
 The chosen topic and the transmitted message for each scenario can be found in Appendix~\ref{appendix:mqtt_message}.
 The messages were devised based on an arbitrary command that may be issued to an IoT device present in the scenario.

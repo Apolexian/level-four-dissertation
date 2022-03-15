@@ -40,7 +40,7 @@ The developed API is analogous to how a TCP socket sends and receives data.
 An alternative approach that we considered was to make the $recv$ function return the value that the client or server read from the stream.
 However, this approach does not integrate well into any protocol implementation due to the general preference for the buffer pattern.
 
-\begin{lstlisting}[language=Rust, float, caption={A similar application in Rust will not compile due to the safety guaranteed by the ownership system. A borrow occurs when $example\_ref$ is assigned to point to $new\_example$, however the ownership system recognises that the borrowed value does not live long enough.}, label=lst:quicsocket_recv]
+\begin{lstlisting}[language=Rust, float, caption={The $recv$ function that the $QuicClient$ and $QuicServer$ use for sending data.}, label=lst:quicsocket_recv]
     async fn recv(&mut self, buf: &mut [u8]) -> Result<usize> {
         let (_, mut recv) = self.bi_streams.next().await.unwrap().unwrap();
         let len = recv

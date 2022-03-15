@@ -69,8 +69,8 @@ UDP uses a connectionless communication model with a minimal number of implement
 The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
 UDP is preferable for real-time systems as using TCP would cause overhead to latency and retransmission of packets that the application no longer needs.
 
-While TCP and UDP have been the dominant standards of the internet since its creation, QUIC is a relatively new general-purpose transport layer protocol first designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine and standardised by the IETF in 2021~\citep{iyengar_quic_2021}.
-QUIC aims to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing over a UDP connection.
+While TCP and UDP have been the dominant standards of the internet since its creation, QUIC is a relatively new general-purpose transport layer protocol. QUIC was first designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine and standardised by the IETF in 2021~\citep{iyengar_quic_2021}.
+It aims to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing over a UDP connection.
 Multiplexing is a method of combining several signals or channels of communication over one shared medium.
 QUIC makes use of multiplexing by facilitating data exchange on the UDP connection through the concept of \textit{streams}.
 Streams are an ordered byte-stream abstraction used by the application to send data of any length.
@@ -81,7 +81,7 @@ By doing so, QUIC also achieves other performance benefits.
 For example, QUIC lifts congestion control algorithms from the kernel space to the userspace.
 Hence, congestion control algorithms can evolve without being tied down to kernel level semantics and constraints.
 
-\begin{figure}[ht]
+\begin{figure}[t]
     \begin{center}
         \begin{subfigure}[b]{0.45\textwidth}
             \begin{tikzpicture}[>=latex]
@@ -197,7 +197,7 @@ Hence, congestion control algorithms can evolve without being tied down to kerne
     \end{center}
 \end{figure}
 
-Compared to TCP/TLS, QUIC combines the transport and cryptographic handshakes to minimise the time needed for connection establishment; figure \ref{fig:handshakes_comparison} shows a comparison of the handshakes.
+Compared to TCP/TLS, QUIC combines the transport and cryptographic handshakes to minimise the time needed for connection establishment; Figure~\ref{fig:handshakes_comparison} shows a comparison of the handshakes.
 QUIC still uses TLS functionality to secure communication as described by~\citet{thomson_using_2021} unless the developer specifies a different cryptographic protocol; however, this is done differently to TCP.
 The initial QUIC handshake keeps the same handshake messages as TLS; however, it uses its framing format, replacing the TLS record layer.
 This use ensures that the connection is always authenticated and encrypted, unlike TLS, where the initial handshake is vulnerable.

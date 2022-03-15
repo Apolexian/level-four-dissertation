@@ -1,4 +1,4 @@
-\section{Connection time comparison} \label{sec:conn_time}
+\subsection{Connection time comparison} \label{sec:conn_time}
 
 In this section of the analysis, we focus on connection time.
 By connection time, we mean the time it takes for the underlying transport protocol to establish a secure connection.
@@ -17,14 +17,16 @@ That is, we began a communication via MQuicTT and the other MQTT implementations
 We have then extracted the time between the start of the QUIC or TCP communication and the handshake completion.
 
 Figure~\ref{fig:connect_time_home} shows the results for the IoT home scenario.
-We can see that $MQuicTT$ connects fractionally slower than the base implementation across the links on average.
+We can see that $MQuicTT$ connects fractionally slower than the base implementation across the links on average, with the least overlap being on 3g and 4g links.
 However, when factoring in the variance, both implementations perform equally well.
+Notably, $MQuicTT$ shows higher variance in connection time, while the TCP implementation is consistent.
+This result can be attributed to the fact that QUIC's advantage comes in scenarios with packets loss and the IoT home scenario does not implement high packet loss.
+QUIC should still theoretically connect faster due to its simpler handshake, however, the implementation may impose overhead that outweighs this.
 
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{images/analysis_connection_time_home.png}
-    \caption{The time it took for the implementations to establish a secure connection in the IoT home scenario.
-        The times are shown in milliseconds.
+    \caption{The time it took for the implementations to establish a secure connection in the IoT home scenario for each link.
         We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
     \label{fig:connect_time_home}
 \end{figure}
@@ -38,23 +40,23 @@ That is, the QUIC implementation likely did not need to retransmit packets as mu
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{images/analysis_connection_time_farm.png}
-    \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario.
-        The times are shown in milliseconds.
+    \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario for each link.
         We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
     \label{fig:connect_time_farm}
 \end{figure}
 
-This results is supported by the results of the synthetic scenario shown in Figure~\ref{fig:connect_time_synth}.
-We can see that $MQuicTT$ again, on average, establishes a connection quicker than the base implementation.
-
-
 \begin{figure}
     \centering
     \includegraphics[width=1\linewidth]{images/analysis_connection_time_synth.png}
-    \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario.
-        The times are shown in milliseconds.
+    \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario for each link.
         We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
     \label{fig:connect_time_synth}
 \end{figure}
 
-Overall, $MQuicTT$ presents an advantage in terms of time needed to establish a connection in environments with high packet loss.
+This result is supported by the data obtained from the synthetic scenario shown in Figure~\ref{fig:connect_time_synth}.
+We can see that $MQuicTT$ again, on average, establishes a connection quicker than the base implementation.
+This is expected as the packet loss here is extreme, hence, QUIC should perform better on average.
+
+
+Overall, $MQuicTT$ presents an advantage in terms of time needed to establish a connection in environments with high packet loss, however, is not advantageous for the IoT home scenario.
+These results support some of the theoretical advantages of QUIC, however, they also show that the advantage may not be as high as reported in the literature.

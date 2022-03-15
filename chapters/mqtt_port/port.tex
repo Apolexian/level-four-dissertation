@@ -2,7 +2,7 @@
 
 This section describes how we used $QuicSocket$ to create a QUIC port of $rumqtt$, the design decisions that we have taken, and possible alternate approaches.
 
-As previously mentioned, $rumqtt$ provides to APIs: $rumqttc$ for creating MQTT clients and $rumqttd$ for creating brokers.
+As previously mentioned, $rumqtt$ provides two APIs: $rumqttc$ for creating MQTT clients and $rumqttd$ for creating brokers.
 Hence, each of these APIs relies on an underlying TCP implementation to transmit data.
 A configuration file is also required for $rumqtdd$ that specifies various parameters such as paths to TLS keys and the ports that MQTT will operate on.
 Additionally, $rumqtt$ implements its own layer of TLS to ensure secure communication on top of the TLS layer provided by the underlying transport protocol.
