@@ -81,8 +81,6 @@ This is further reinforced by the client being reduced by a higher percentage fr
 Hence, from the binary analysis conducted we can see that the QUIC stack contributes a large amount to the overall binary size of MQuicTT.
 We can also see that reducing the size of the QUIC stack is not trivial with best results coming from compiling to a 32-bit only target.
 
-When it comes to reducing the size of the TLS component~\cite{eggert_towards_2020} attempts create a minimal cypher implementations used by TLS, and we instead opt to discuss the possibility of a complete alternative to TLS, suitable for hardware constrained devices in Section~\ref{chap:TLS}.
-
 Another avenue to reduce the binary size is to look at which features of QUIC and TLS contribute most to the size of the binary.
 We have performed a by feature analysis of the $Quinn$ and $Rustls$ binary contributions using the previously described methodology.
 
