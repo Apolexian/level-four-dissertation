@@ -28,9 +28,10 @@ This different use of TLS presented a challenge in calculating the binary size o
     \caption{The identified QUIC implementations and their binary size footprint. The footprint has been split into a client and server footprint using a minimal reproducible example for each. We used each implementation to create an example client and server capable of sending and receiving QUIC packets and analysed the binary size. Where provided, we compared this to the given examples to ensure as little implementation bias as possible. However, this is still not a perfect estimate, and some variance due to implementation details may be present.}\label{tab:quics}
     %\tt 
     \rowcolors{2}{}{gray!3}
-    \begin{tabular}{@{}lllll@{}}
+    \begin{tabular}{@{}lp{18mm}p{29mm}p{29mm}l@{}}
         \toprule
-        \textbf{Implementation} & \textbf{PL}   & \textbf{Footprint (client) (MiB)} & \textbf{Footprint (server) (MiB)} & \textbf{TLS method} \\
+        \textbf{Implementation} & \textbf{PL}   & \textbf{Footprint \newline (client) (MiB)} & \textbf{Footprint 
+    \newline(server) (MiB)} & \textbf{TLS method} \\
         ngtcp2                  & \texttt{C}    & \texttt{3.4}                      & \texttt{4.3}                      & \texttt{External}   \\
         picoquic                & \texttt{C}    & \texttt{3.2}                      & \texttt{3.9}                      & \texttt{External}   \\
         msquic                  & \texttt{C}    & \texttt{3.2}                      & \texttt{4.1}                      & \texttt{External}   \\
