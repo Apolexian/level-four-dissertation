@@ -19,15 +19,15 @@ Significantly, MQTT relies on a transport layer protocol to send data and ensure
 The standard in current MQTT implementations is to use TLS to provide secure data transfer.
 As we present in this work, this adds overhead, which means that the advantages of MQTT are negated if we need secure communication.
 
-There have recently been several developments in systems software that aim to succeed existing industry standards.
+There have recently been several developments in systems software that aim to succeed in existing industry standards.
 QUIC~\citep{iyengar_quic_2021}, a new transport layer network protocol initially designed at Google, is set to succeed TCP with a number of improvements.
 QUIC boasts advantages in both secure communication and performance by eliminating several overheads of TCP such as head of line blocking and requiring a much simpler handshake to establish a secure connection.
 In addition to this, the Rust programming language is a memory-safe systems programming language that aims to succeed C.
 Rust is secure by design due to its type-system and still provides the needed efficiency due to its region-based memory management approach adding no real overhead.
 
-Hence, to take advantage of the developments made in the transport protocol and programming languages spaces we must analyse if a Rust implementation of QUIC can be a viable alternative to existing widely-deployed implementations.
+Hence, to take advantage of the developments made in the transport protocol and programming languages spaces, we must analyse if a Rust implementation of QUIC can be a viable alternative to existing widely-deployed implementations.
 
-To do so we introduce MQuicTT - a QUIC port of an MQTT library in the Rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges IoT presents for network protocols.
+To do so, we introduce MQuicTT - a QUIC port of an MQTT library in the Rust programming language, discuss the design choices made during its development, analyse its performance and discuss the challenges IoT presents for network protocols.
 We show that $MQuicTT$ is as performant as the baseline chosen TCP MQTT implementation in our testing scenarios.
 We further analyse the steps needed to create protocols for hardware constrained devices and present an analysis for the methodology of lowering the overhead of a QUIC stack.
 Finally, we analyse the libraries and features that contribute to the binary size of Rust implementations.
@@ -37,8 +37,8 @@ Finally, we analyse the libraries and features that contribute to the binary siz
 The rest of this dissertation is structured as follows:
 \begin{itemize}
     \item Chapter~\ref{chap:back} provides a background on the recent developments in the transport layer network protocol space, IoT and the Rust programming language.
-    \item Chapter~\ref{chap:reqs} presents the requirements that were set to answer our reserach questions and the design of the implementation of $MQuicTT$ and its ecosystem.
+    \item Chapter~\ref{chap:reqs} presents the requirements that were set to answer our research questions and the design of the implementation of $MQuicTT$ and its ecosystem.
     \item Chapter~\ref{chap:impl} details the implementation of $MQuicTT$ and $QuicSocket$ - an intermediate QUIC API that we have developed. This chapter also presents a discussion of the choices made during implementation and the difficulties that we circumvented.
     \item Chapter~\ref{chapter:eval} details the experiment design and analysis of $MQuicTT$ and provides a discussion of results.
-    \item Finally, Chapter~\ref{chap:conclusion} concludes and summarises important results, and discusses avenues for future work.
+    \item Finally, Chapter~\ref{chap:conclusion} concludes and summarises important results and discusses avenues for future work.
 \end{itemize}

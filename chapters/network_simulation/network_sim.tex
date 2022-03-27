@@ -28,15 +28,15 @@ The script takes several parameters to create the following three scenarios:
 
 The topology for all three scenarios remains the same - a minimum spanning tree of a typical IoT mesh network.
 When designing this topology, we needed it to reflect various realistic IoT scenarios.
-This topology is designed to demonstrate network congestion and fits all three scenarios, hence we do not need to change it.
+This topology is designed to demonstrate network congestion and fits all three scenarios; hence we do not need to change it.
 We can imagine this as a singular room in a home with all of its smart appliances being a cluster in the smart home or a cluster of 3D printers in a section of a farm in the 3D printer farm.
 The critical feature of this topology is that many clusters are connected to a central broker that controls the topology, hence creating a dumbbell structure.
 The full definition of this topology can be found in Appendix~\ref{appendix:topo}.
 The variables that the script changes between scenarios and simulations are the link's \textit{bandwidth}, \textit{delay} and the rate of \textit{packet loss}.
 
 The bandwidth of a link is the maximum rate of data transfer we can achieve.
-In contrast to bandwidth in signal processing, in computer networking we measure bandwidth in bits per second rather than hertz.
-The delay of a link specifies the latency of the link, i.e the time that a bit of data takes to travel across a link. 
+In contrast to bandwidth in signal processing, in computer networking, we measure bandwidth in bits per second rather than hertz.
+The delay of a link specifies the latency of the link, i.e. the time that a bit of data takes to travel across a link. 
 We measure this in milliseconds or seconds.
 Link delay corresponds to the geographical distance between the communicating parties; however, in the case of IoT, we can expect devices to be in local proximity.
 Lastly, the packet loss rate shows the percentage of corrupted or dropped packets in transit.
@@ -93,7 +93,7 @@ If the protocol performs well for an extreme scenario, we can expect it to also 
 \end{table}
 
 \begin{table}[ht]
-    \caption{The parameters chosen for each link simulation in Mininet in the synthetic scenario. Here we opt for extreme packet loss scenarios to test the boundaries of the protocols. We opted for 20 times the normal packet loss that the link can expect in each case. We have also tested this for higher values however all protocol implementations greatly suffered in performance beyond this.}\label{tab:links:synth}
+    \caption{The parameters chosen for each link simulation in Mininet in the synthetic scenario. Here we opt for extreme packet loss scenarios to test the boundaries of the protocols. We opted for 20 times the normal packet loss that the link can expect in each case. We have also tested this for higher values however, all protocol implementations greatly suffered in performance beyond this.}\label{tab:links:synth}
     %\tt 
     \rowcolors{2}{}{gray!3}
     \begin{tabular}{@{}llll@{}}
@@ -134,6 +134,6 @@ In particular, brokers reserve topics for system messages starting with the \$ c
 
 The chosen topic and the transmitted message for each scenario can be found in Appendix~\ref{appendix:mqtt_message}.
 The messages were devised based on an arbitrary command that may be issued to an IoT device present in the scenario.
-For the synthetic scenario we opted to use a message that is considerably longer, to test the limits of each implementation.
-This message simply consisted of a paylaod with a field replicated thousands of times.
-It has ben omitted from the Appendix due to being too long.
+For the synthetic scenario, we opted to use a message that is considerably longer to test the limits of each implementation.
+This message simply consisted of a payload with a field replicated thousands of times.
+It has been omitted from the Appendix due to being too long.

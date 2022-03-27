@@ -7,21 +7,21 @@ This work has looked at recent developments in the spaces of transport layer pro
 We have aimed to analyse if the technologies, QUIC and Rust, set to succeed current industry standards can be used for IoT network firmware.
 The context of IoT provides interesting constraints in terms of the balance of performance, security and hardware constraints.
 We have discussed MQTT - the most widely used IoT application layer protocol.
-MQTT presents an HTTP like, lightweight, publish-subscribe communication system.
+MQTT presents an HTTP like lightweight, publish-subscribe communication system.
 We have also shown that MQTT relies on the transport layer to provide transport semantics and secure communication.
 
-By analysing the currently available QUIC and MQTT implementations we identified libraries that were used as the basis for our implementation.
+By analysing the currently available QUIC and MQTT implementations, we identified libraries that were used as the basis for our implementation.
 Both of the selected libraries were developed in the Rust programming language.
-Using $Quinn$ we developed an intermediate API - $QuicSocket$ that provides an API for connecting, sending and receiving using QUIC.
+Using $Quinn$, we developed an intermediate API - $QuicSocket$ that provides an API for connecting, sending and receiving using QUIC.
 Further, we have changed the base $rumqtt$ implementation to use QUIC using this API, resulting in $MQuicTT$ - a QUIC based MQTT implementation.
 
-Using a mininet test bench we have analysed the performance of the the resulting implementation and have shown that it is comparable to $rumqtt$ in terms of connection time and total transmission time.
+Using a mininet test bench, we have analysed the performance of the the resulting implementation and have shown that it is comparable to $rumqtt$ in terms of connection time and total transmission time.
 
 We have analysed the binary sizes of the broker and client of $MQuicTT$ and identified the dependencies that contribute the most to the size.
 We have shown that Rust's use of $utf-8$ strings can result in size bloat.
 Additionally, we have further analysed the contributions made by the QUIC and TLS implementations to devise a methodology for trimming down the QUIC stack.
 
 Overall, we have found that while $MQuicTT$ performed comparably to $rumqtt$, we could not trim down the binary size enough for it to be used on truly hardware constrained devices.
-The resulting implementation can however be used on devices of the Raspberry Pi class.
+However, the resulting implementation can be used on devices of the Raspberry Pi class.
 
 \input{chapters/further_work.tex}

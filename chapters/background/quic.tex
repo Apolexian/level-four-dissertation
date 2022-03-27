@@ -54,13 +54,13 @@ At this point, TCP establishes the connection and can transfer data on it.
 \end{figure}
 
 In order to achieve \textit{secure communication}, TLS~\citep{rescorla_transport_2018} is often used in the TCP stack.
-In order to do this, a separate TLS handshake has to occur in order to specify the version of TLS to use, decide on the cypher suites, authenticate the server via its public key and certificate authority's signature, and generate a session key that the protocol uses for symmetric encryption during communication.
+In order to do this, a separate TLS handshake has to occur to specify the version of TLS to use, decide on the cypher suites, authenticate the server via its public key and certificate authority's signature, and generate a session key that the protocol uses for symmetric encryption during communication.
 In the TLS handshake, the first step is for the client to send a $ClientHello$ message that specifies the highest version of TLS that the client supports, a list of suggested cypher suites, compression methods and a random number.
 The server responds with a $ServerHello$ message containing the selected TLS version, cypher suite, compression method, and random number.
 The server then sends its certificate and $ServerKeyExchange$ message along with the $ServerHelloDone$ message indicating that it has completed its part of the negotiation process.
 The client will respond with the $ClientKeyExchange$ message (CKE), which may contain a public key depending on the chosen cypher suite.
 Following this, the client sends a $ChangeCipherSpec$ message indicating that communication from this point is authenticated and encrypted.
-The client combines this message with a client finished message.
+The client combines this message with a "client finished" message.
 The server responds with the same message, establishing the TLS connection.
 
 Due to the establishment of communication and properties guaranteed by TCP, this process lengthens communication latency.
@@ -69,7 +69,7 @@ UDP uses a connectionless communication model with a minimal number of implement
 The only mechanisms provided by UDP are port numbers and checksums in order to ensure data integrity.
 UDP is preferable for real-time systems as using TCP would cause overhead to latency and retransmission of packets that the application no longer needs.
 
-While TCP and UDP have been the dominant standards of the internet since its creation, QUIC is a relatively new general-purpose transport layer protocol. QUIC was first designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine and standardised by the IETF in 2021~\citep{iyengar_quic_2021}.
+While TCP and UDP have been the dominant standards of the internet since their creation, QUIC is a relatively new general-purpose transport layer protocol. QUIC was first designed by~\citet{jim_roskind_2012} at Google as part of the Chromium web engine and standardised by the IETF in 2021~\citep{iyengar_quic_2021}.
 It aims to improve upon, and eventually make obsolete, TCP by using the concept of multiplexing over a UDP connection.
 Multiplexing is a method of combining several signals or channels of communication over one shared medium.
 QUIC makes use of multiplexing by facilitating data exchange on the UDP connection through the concept of \textit{streams}.

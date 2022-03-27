@@ -17,10 +17,10 @@ The header structure for CoAP and MQTT is very similar, with the significant dif
 In the past, this restricted MQTT to the TCP/TLS stack; however, with the introduction of QUIC, we can see further similarities between CoAP and MQTT using QUIC with both protocols providing data transfer using UDP.
 A report on the active deployment of data transport protocols~\cite{tmobile_iot} showed that $62.61\%$ of deployments rely on MQTT as one of their protocols.
 In contrast, CoAP was the most widely used UDP based protocol, with $22.49\%$ of deployments relying on it as one of their protocols.
-This is in part because the class of constrained devices that CoAP targets does not cover the entire range of constrained IoT devices.
+This is partly because the class of constrained devices that CoAP targets does not cover the entire range of constrained IoT devices.
 The authors show that MQTT is more suitable for less constrained devices with long-standing connections; however, it may not be suitable for relatively more constrained devices.
 
 In this work, we have focused on providing MQTT with similar advantages that CoAP enjoys due to UDP and analysing if MQTT can be made more efficient to capture the range of more demanding hardware constrained devices.
-Capturing a wider range of constrained devices using MQTT would increase the number of deployments that can take advantage of its feature set.
-Additionally, the reasons for our choice stem not only from MQTT's popularity but also due to the exciting prospect of solving its historical dependency on TCP/TLS.
+Capturing a more comprehensive range of constrained devices using MQTT would increase the number of deployments that can take advantage of its feature set.
+Additionally, our choice stems not only from MQTT's popularity but also due to the exciting prospect of solving its historical dependency on TCP/TLS.
 This is further reinforced by CoAP showing a similar approach and being widely deployed for hardware constrained devices.

@@ -36,7 +36,7 @@ As TCP is a stateful protocol, minimal connection handling occurs after opening 
 \end{lstlisting}
 
 As we have modelled $QuicSocket$ to have an API that closely resembles a typical $tcpstream$ API, the challenge of this stage of the port was managing QUIC streams and the state of connection.
-Due to UDP, the protocol underlying QUIC, being stateless, we have handled the connection differently in brokers and clients.
+Due to UDP, the protocol that underlyes QUIC, being stateless, we have handled the connection differently in brokers and clients.
 
 The connection request is sent before an MQTT client object is initialised in the client's case.
 Upon successful connection, the programmer must pass the connection to the initialisation function of the client.
@@ -74,5 +74,5 @@ With the chosen approach, it is possible to use different underlying transport p
 Another avenue of discussion stems from $rumqtt$ having two different client implementations: an asynchronous client and an asynchronous client.
 In either case, a $tokio$ eventloop is used to handle events.
 As $QuicSocket$ requires an asynchronous environment, the natural choice was to use the asynchronous client.
-It could however be possible to handle asynchronous events more efficiently by tying the QUIC eventloop to the MQTT eventloop as in the approach described by~\cite{kumar_implementation_2019}.
+It could, however, be possible to handle asynchronous events more efficiently by tying the QUIC eventloop to the MQTT eventloop as in the approach described by~\cite{kumar_implementation_2019}.
 In our case, we leave the comparison between these two approaches as an avenue for future work.

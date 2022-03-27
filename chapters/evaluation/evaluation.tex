@@ -47,20 +47,20 @@ Hence, the steps we take are as follows:
 
 After every step, we record the difference in binary size made by the change using the same methodology.
 
-Once this step is completed we further analyse the size of $Quinn$ and $Rustls$ using a by-function binary size breakdown.
-Using the $cargo-bloat$ utility we can get a list of the contribution of each function to the binary size and then assign each function to its respective protocol feature.
+Once this step is completed, we further analyse the size of $Quinn$ and $Rustls$ using a by-function binary size breakdown.
+Using the $cargo-bloat$ utility, we can get a list of the contribution of each function to the binary size and then assign each function to its respective protocol feature.
 
 \input{chapters/evaluation/binary_sizes.tex}
 
 \section{Summary}
 
-When discussing the possibility of using a Rust QUIC implementation as the transport layer protocol for network firmware in IoT devices we established that the QUIC implementation must perform at least as well as the baseline and have a binary size which can fit onto widely used IoT devices.
+When discussing the possibility of using a Rust QUIC implementation as the transport layer protocol for network firmware in IoT devices, we established that the QUIC implementation must perform at least as well as the baseline and have a binary size that can fit onto widely used IoT devices.
 
-From the above analysis we can conclude that $MQuicTT$ performs at least as well as the baseline TCP implementation of $rumqtt$.
+From the above analysis, we can conclude that $MQuicTT$ performs at least as well as the baseline TCP implementation of $rumqtt$.
 When it comes to connection time, $MQuicTT$ performs marginally better, and when it comes to total transmission time, the implementations are on par.
 Hence, this requirement is satisfied.
 
-In terms of binary size we have managed to reduce it to approximately $8Mb$ from a starting point of $9.1Mb$, a reduction of $12.1\%$.
+In terms of binary size, we have managed to reduce it to approximately $8Mb$ from a starting point of $9.1Mb$, a reduction of $12.1\%$.
 We have also shown that the methods developed by~\citet{eggert_towards_2020} do translate to our implementation, implying that this could be a general methodology.
 This size of binary would easily be installable on popular IoT devices such as the Raspberry Pi 3 Model B, Beagle Board or the Arduino Due.
 However, this size of binary would not support industrially-wide used chips such as the esp32.

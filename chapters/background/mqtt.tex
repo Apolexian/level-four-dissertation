@@ -4,7 +4,7 @@ Considering the constraints that apply to IoT devices, we will now look at one o
 MQTT~\citep{oasis_mqtt_2014}, originally standing for Message Queuing Telemetry Transport, is designed to be a lightweight protocol to transport messages between devices using the publish-subscribe method.
 MQTT defines two types of participants - the broker and the client.
 The broker is a server that receives messages from all clients and then routes these messages to the appropriate destinations.
-On the other hand, a client is just a device that runs an MQTT library and sends the broker messages.
+On the other hand, a client is a device that runs an MQTT library and sends the broker messages.
 
 The broker handles the routing of messages in MQTT via \textit{topics}.
 When a client wishes to publish a message, it does so on a client, and the broker distributes this message to all other clients subscribed to this topic.
@@ -103,7 +103,7 @@ Additionally, MQTT sends all its connection credentials in plain text format; he
 The most widely used suite for providing data transfer and encryption for MQTT is TCP/TLS; however, any protocol that provides lossless, bi-directional communication can be used.
 
 As QUIC provides such a form of communication, we can see that we can use it as the transport level protocol for MQTT.
-The benefits of this are numerous. 
+The benefits of this are numerous.
 For example, perceived performance benefits from lower communication overhead and encryption at header and packet levels.
 QUIC also comes with the benefit of multiplexing.
 QUIC can open several streams on a single connection instead of opening several connections from one client.
