@@ -31,6 +31,8 @@ l4proj.pdf :\
     /usr/share/texlive/texmf-dist/fonts/tfm/public/fbb/fbb-Regular-tlf-t1.tfm\
     /usr/share/texlive/texmf-dist/fonts/tfm/public/fbb/fbb-Regular-tlf-ts1--base.tfm\
     /usr/share/texlive/texmf-dist/fonts/tfm/public/fbb/fbb-Regular-tlf-ts1.tfm\
+    /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Oblique-tosf-t1--base.tfm\
+    /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Oblique-tosf-t1.tfm\
     /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Regular-tosf-t1--base.tfm\
     /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Regular-tosf-t1.tfm\
     /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraSans-Regular-osf-t1--base.tfm\
@@ -55,6 +57,7 @@ l4proj.pdf :\
     /usr/share/texlive/texmf-dist/fonts/type1/public/fbb/fbb-BoldItalic.pfb\
     /usr/share/texlive/texmf-dist/fonts/type1/public/fbb/fbb-Italic.pfb\
     /usr/share/texlive/texmf-dist/fonts/type1/public/fbb/fbb-Regular.pfb\
+    /usr/share/texlive/texmf-dist/fonts/type1/public/fira/FiraMono-Oblique.pfb\
     /usr/share/texlive/texmf-dist/fonts/type1/public/fira/FiraMono-Regular.pfb\
     /usr/share/texlive/texmf-dist/fonts/type1/public/fira/FiraSans-Regular.pfb\
     /usr/share/texlive/texmf-dist/fonts/type1/public/newtx/LibertineMathMI.pfb\
@@ -65,9 +68,11 @@ l4proj.pdf :\
     /usr/share/texlive/texmf-dist/fonts/vf/public/fbb/fbb-Regular-tlf-sc-t1.vf\
     /usr/share/texlive/texmf-dist/fonts/vf/public/fbb/fbb-Regular-tlf-t1.vf\
     /usr/share/texlive/texmf-dist/fonts/vf/public/fbb/fbb-Regular-tlf-ts1.vf\
+    /usr/share/texlive/texmf-dist/fonts/vf/public/fira/FiraMono-Oblique-tosf-t1.vf\
     /usr/share/texlive/texmf-dist/fonts/vf/public/fira/FiraMono-Regular-tosf-t1.vf\
     /usr/share/texlive/texmf-dist/fonts/vf/public/fira/FiraSans-Regular-osf-t1.vf\
     /usr/share/texlive/texmf-dist/fonts/vf/public/newtx/ntxsy.vf\
+    /usr/share/texlive/texmf-dist/fonts/vf/public/newtx/ntxsy7.vf\
     /usr/share/texlive/texmf-dist/fonts/vf/public/newtx/nxlmi.vf\
     /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii\
     /usr/share/texlive/texmf-dist/tex/generic/atbegshi/atbegshi.sty\
@@ -270,30 +275,43 @@ l4proj.pdf :\
     /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map\
     /var/lib/texmf/web2c/pdftex/pdflatex.fmt\
     chapters/abstract.tex\
-    chapters/appendecies/data.tex\
+    chapters/appendecies/mininet_topo.tex\
     chapters/appendecies/mqtt_messages.tex\
     chapters/background/background.tex\
     chapters/background/iot.tex\
+    chapters/background/iot_protos.tex\
     chapters/background/mqtt.tex\
     chapters/background/quic.tex\
     chapters/background/rust.tex\
     chapters/conclusion.tex\
     chapters/evaluation/binary_sizes.tex\
     chapters/evaluation/connection_time.tex\
-    chapters/evaluation/encryption.tex\
     chapters/evaluation/evaluation.tex\
     chapters/evaluation/performance.tex\
-    chapters/evaluation/tls.tex\
+    chapters/further_work.tex\
+    chapters/implementation.tex\
     chapters/intro.tex\
-    chapters/libs/choice_of_libs.tex\
     chapters/libs/mqtt_impls.tex\
     chapters/libs/quic_impls.tex\
     chapters/mqtt_port/port.tex\
     chapters/network_simulation/network_sim.tex\
     chapters/quic_socket/quic_socket.tex\
+    chapters/reqs.tex\
     images/CompSci_colour.pdf\
+    images/analysis_comm_time_farm.png\
+    images/analysis_comm_time_home.png\
+    images/analysis_comm_time_synth.png\
+    images/analysis_connection_time_farm.png\
+    images/analysis_connection_time_home.png\
+    images/analysis_connection_time_synth.png\
     images/mininet_topo.png\
+    images/mquictt_binary_broker.png\
+    images/mquictt_binary_by_function.png\
+    images/mquictt_binary_client.png\
     images/quic_impls.png\
+    images/quinn_binary_reduce_broker.png\
+    images/quinn_binary_reduce_client.png\
+    images/rustls_binary_by_function.png\
     l4proj.bib\
     l4proj.cls\
     l4proj.tex\
@@ -364,6 +382,10 @@ l4proj.pdf :\
 
 /usr/share/texlive/texmf-dist/fonts/tfm/public/fbb/fbb-Regular-tlf-ts1.tfm :
 
+/usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Oblique-tosf-t1--base.tfm :
+
+/usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Oblique-tosf-t1.tfm :
+
 /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Regular-tosf-t1--base.tfm :
 
 /usr/share/texlive/texmf-dist/fonts/tfm/public/fira/FiraMono-Regular-tosf-t1.tfm :
@@ -412,6 +434,8 @@ l4proj.pdf :\
 
 /usr/share/texlive/texmf-dist/fonts/type1/public/fbb/fbb-Regular.pfb :
 
+/usr/share/texlive/texmf-dist/fonts/type1/public/fira/FiraMono-Oblique.pfb :
+
 /usr/share/texlive/texmf-dist/fonts/type1/public/fira/FiraMono-Regular.pfb :
 
 /usr/share/texlive/texmf-dist/fonts/type1/public/fira/FiraSans-Regular.pfb :
@@ -432,11 +456,15 @@ l4proj.pdf :\
 
 /usr/share/texlive/texmf-dist/fonts/vf/public/fbb/fbb-Regular-tlf-ts1.vf :
 
+/usr/share/texlive/texmf-dist/fonts/vf/public/fira/FiraMono-Oblique-tosf-t1.vf :
+
 /usr/share/texlive/texmf-dist/fonts/vf/public/fira/FiraMono-Regular-tosf-t1.vf :
 
 /usr/share/texlive/texmf-dist/fonts/vf/public/fira/FiraSans-Regular-osf-t1.vf :
 
 /usr/share/texlive/texmf-dist/fonts/vf/public/newtx/ntxsy.vf :
+
+/usr/share/texlive/texmf-dist/fonts/vf/public/newtx/ntxsy7.vf :
 
 /usr/share/texlive/texmf-dist/fonts/vf/public/newtx/nxlmi.vf :
 
@@ -842,13 +870,15 @@ l4proj.pdf :\
 
 chapters/abstract.tex :
 
-chapters/appendecies/data.tex :
+chapters/appendecies/mininet_topo.tex :
 
 chapters/appendecies/mqtt_messages.tex :
 
 chapters/background/background.tex :
 
 chapters/background/iot.tex :
+
+chapters/background/iot_protos.tex :
 
 chapters/background/mqtt.tex :
 
@@ -862,17 +892,15 @@ chapters/evaluation/binary_sizes.tex :
 
 chapters/evaluation/connection_time.tex :
 
-chapters/evaluation/encryption.tex :
-
 chapters/evaluation/evaluation.tex :
 
 chapters/evaluation/performance.tex :
 
-chapters/evaluation/tls.tex :
+chapters/further_work.tex :
+
+chapters/implementation.tex :
 
 chapters/intro.tex :
-
-chapters/libs/choice_of_libs.tex :
 
 chapters/libs/mqtt_impls.tex :
 
@@ -884,11 +912,37 @@ chapters/network_simulation/network_sim.tex :
 
 chapters/quic_socket/quic_socket.tex :
 
+chapters/reqs.tex :
+
 images/CompSci_colour.pdf :
+
+images/analysis_comm_time_farm.png :
+
+images/analysis_comm_time_home.png :
+
+images/analysis_comm_time_synth.png :
+
+images/analysis_connection_time_farm.png :
+
+images/analysis_connection_time_home.png :
+
+images/analysis_connection_time_synth.png :
 
 images/mininet_topo.png :
 
+images/mquictt_binary_broker.png :
+
+images/mquictt_binary_by_function.png :
+
+images/mquictt_binary_client.png :
+
 images/quic_impls.png :
+
+images/quinn_binary_reduce_broker.png :
+
+images/quinn_binary_reduce_client.png :
+
+images/rustls_binary_by_function.png :
 
 l4proj.bib :
 

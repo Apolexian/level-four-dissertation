@@ -26,6 +26,23 @@ In order to analyse QUIC as a transport layer protocol for IoT, we have identifi
     \end{itemize}
 \end{itemize}
 
+The creation of $MQuicTT$ is not only important to be able to evaluate the usage of QUIC for IoT, but also to test the viability of porting an MQTT implementation to QUIC in Rust.
+
+We treat the base version of MQTT as the standard for comparisons as this will be an industry used TCP implementation of the protocol.
+A comparison to this will be made in terms of network performance and storage use.
+We have chosen to focus on the storage constraint of IoT hardware as this is often the hardest requirement to fulfil.
+Storage also often dictates the other hardware specifications for the device as it usually takes up most physical space.
+
+As previously discussed, we analyse the viability of creating a general methodology for reducing the QUIC stack for IoT devices following the methodology of~\cite{eggert_towards_2020}.
+To do this we must also analyse the storage footprint of each feature of the transport layer stack.
+By features we mean the features as described in the protocol's respective RFC.
+For QUIC, for example, this could be the 0-RTT or connection migration features.
+If any of these are heavy in terms of required storage space and not necessary for IoT devices, we could extract them from the implementation.
+
+Finally, we hypothesise that TLS takes a lot of storage space and hardware, again, based on the analysis performed by~\cite{eggert_towards_2020}.
+Hence, it could be possible to create a QUIC extension with a lightweight security protocol such as KP-ABE.
+Such an extension, however, may be out of scope of this work.
+
 From these requirements, we have split the project into the following objectives:
 
 \begin{itemize}
@@ -35,8 +52,21 @@ From these requirements, we have split the project into the following objectives
     \item \textbf{O4}: Create a test bench for the network performance analysis of MQuicTT.
     \item \textbf{O5}: Devise a methodology for trimming down the QUIC stack in terms of binary size.
     \item \textbf{O6}: Analyse the components of the MQuicTT binary.
-    \item \textbf{O7}: Analyse the features of TLS and possible alternatives.
 \end{itemize}
+
+\textbf{O1} focuses on finding implementations that can be used as the underlying libraries for $MQuicTT$.
+As discussed in Section~\ref{sec:mquictt_design}, we have opted to use existing implementations, hence we must compare them based on our criteria of performant, safe, implementations that fit IoT storage constraints.
+
+We have also opted to create an intermediate layer to encapsulate the QUIC protocol logic in the implementation.
+Hence, \textbf{O2} focuses on creating this abstraction.
+
+\textbf{O3} describes the core of the implementation of $MQuicTT$.
+Using the libraries identified in \textbf{O1} and the abstraction created in \textbf{O2} we must create a port of the chosen MQTT implementation using QUIC.
+
+We then move to the evaluation stage of the project, hence, creating a test bench in \textbf{O4} will be crucial for the network performance portion of this evaluation.
+
+In \textbf{O5} we then focus on the storage analysis of the resulting implementation and devise methods for trimming down the QUIC stack.
+We also analyse the components of the resulting binaries in \textbf{O6} to find where the contributions to the binary size come from exactly.
 
 Hence, the rest of this chapter is split into sections corresponding to the design for the implementation centred objectives, that is, \textbf{O1}, \textbf{O2}, \textbf{O3}.
 The rest of the objectives are addressed in Chapter~\ref{chapter:eval}.
@@ -45,25 +75,47 @@ The rest of the objectives are addressed in Chapter~\ref{chapter:eval}.
 
 In this section, we present a comparison of existing QUIC and MQTT implementations that can be used as underlying libraries for MQuicTT.Additionally, we discuss the high-level design of MQuicTT and the approach we have taken when it comes to using existing libraries compared to creating new protocol implementations.
 
+\section{Overall MQuicTT design} \label{sec:mquictt_design}
 
-\input{chapters/libs/quic_impls.tex}
-\input{chapters/libs/mqtt_impls.tex}
+We first analyse what is required to create $MQuicTT$ based on the established requirements and objectives.
 
-\subsection{MQuicTT design}
-
-To create MQuicTT, we have, as previously seen, opted to use existing implementations of QUIC and MQTT.
+We opt to use existing implementations of QUIC and MQTT.
 An alternate approach to this would be creating implementations from scratch that could be optimised for our use case.
 However, we demonstrate an actual use case by opting to use existing libraries.
 These libraries have both been built for production use and are relatively widely deployed.
 Hence, we are more likely to get accurate results.
 In addition to this, the development time needed to create implementations for these protocols from scratch would far exceed this project's scope.
 
-However, we have created an intermediate library that will act as an abstraction from the QUIC logic - $QuicSocket$.
+Secondly, we must create an intermediate library that will act as an abstraction from the QUIC logic - $QuicSocket$.
 By creating this intermediate library and ensuring that its API mimics a standard TCP socket, we lower the difficulty of porting $rumqtt$ to QUIC.
 Additionally, this library can be used for any application that uses the QUIC protocol.
+The key consideration when creating this abstraction is how we want to use QUIC streams.
 
-Hence, the design for the implementation has been split into two broad stages.
-In the first stage, we create an abstraction around $quinn$ that acts as a socket for the QUIC protocol.
-In the second stage we use the resulting socket library to port $rumqtt$ to QUIC.
+To recap, QUIC streams are an encapsulation around the data transfer portion of the QUIC protocol.
+After establishing a connection, QUIC opens streams in order send and receive data.
+There can be an arbitrary number of streams on a single UDP connection using QUIC.
+Hence, QUIC provides advantages by removing head-of-line blocking as different logical separations of data can be sent on different streams.
+For example, we can opt to send an HTML file and a stylesheet for a website on different streams so that if a packet of the stylesheet gets lost, the HTML can still be rendered.
+
+We can also use this strategy to improve the performance of $MQuicTT$ by choosing an appropriate encapsulation.
+There are two main possibilities here.
+Firstly, we may opt to send a single MQTT connection on a QUIC stream.
+Secondly, we may opt to treat every subscription to a broker as a separate QUIC stream.
+The specifics of our choice and a discussion on this topic can be found in Chapter~\ref{chap:impl}.
+
+Hence, the design for the implementation has been split into the following stages.
+Firstly, we must find appropriate implementations of QUIC and MQTT based on our criteria.
+Although we opt to use a Rust implementation, it is still important to consider other systems-language based implementations of QUIC.
+If the Rust implementations of the protocol stand out in terms of storage consumption compared to, for example, C++, this would indicate that Rust is perhaps less suitable for this application.
+Secondly, we must create an abstraction around the chosen QUIC implementation that acts as a socket for the QUIC protocol.
+This abstraction must have the functionality required to securely transfer data using QUIC.
+That is, we must be able to work with TLS keys, establish a secure connection and send, and receive data using streams.
+This library must also have an API similar to that of the TCP sockets API for external consistency.
+This means that we must have functions that take in buffers, write or read from those buffers, and return the number of bytes that were read or written.
+Adhering to this API will also simplify the port.
+Lastly, we must use the resulting socket library to port the chosen MQTT implementation to QUIC.
 
 Further discussion of specific technical choices that we have made during the implementation can be found in Chapter~\ref{chap:impl}.
+
+\input{chapters/libs/quic_impls.tex}
+\input{chapters/libs/mqtt_impls.tex}

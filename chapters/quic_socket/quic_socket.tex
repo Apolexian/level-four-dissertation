@@ -71,3 +71,33 @@ For one, an asynchronous function in Rust returns an $impl Future$, meaning that
 However, the $async-trait$ crate instead returns a $dyn Future$, the Rust implementation of dynamic dispatch, resulting in a heap allocation but allowing it to be used inside of traits.
 We will not further discuss the other reasons for this crate's existence; however,~\cite{matsakis_baby_2019} created a comprehensive analysis of this issue.
 Once Rust incorporates asynchronous traits into the language, the heap allocation issue will be resolved, resulting in this problem no longer existing for hardware constrained devices.
+
+In addition to the QUIC specific logic, our goal was also for all communication to happen securely.
+Hence, $QuicSocket$ does not accept connection requests without correct TLS keys.
+To make working with this easier, we have created functions that handle the creation and reading of TLS keys.
+
+\newpage
+
+\begin{lstlisting}[language=Rust, caption={The $gen_certificates$ function that can be used to generate appropriate TLS certificates.}, label=lst:tls_gen]
+    #[allow(unused)]
+    #[allow(clippy::field_reassign_with_default)] // https://github.com/rust-lang/rust-clippy/issues/6527
+    pub fn gen_certificates() -> Result<(), Box<dyn Error>> {
+        let cert = rcgen::generate_simple_self_signed(vec!["localhost".into()]).unwrap();
+        let cert_der = cert.serialize_der().unwrap();
+        fs::write("./cert.der".to_string(), &cert_der).unwrap();
+        let priv_key = cert.serialize_private_key_der();
+        fs::write("./key.der".to_string(), &priv_key).unwrap();
+        let key = rustls::PrivateKey(priv_key);
+        let cert = vec![rustls::Certificate(cert_der.clone())];
+        let mut server_crypto = rustls::ServerConfig::builder()
+            .with_safe_defaults()
+            .with_no_client_auth()
+            .with_single_cert(cert, key)?;
+        server_crypto.alpn_protocols = ALPN_QUIC_HTTP.iter().map(|&x| x.into()).collect();
+        Ok(())
+    }
+\end{lstlisting}
+
+Listing~\ref{lst:tls_gen} shows the source code of the function that can be used to generate TLS certificates.
+The certificates are save to corresponding "key" and "certificate" files and can be distributed to the client and server.
+Both the client and server expect certificates to be present when they are run.
