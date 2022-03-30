@@ -6,7 +6,37 @@ Additionally, we describe the design choices taken.
 
 \section{Requirements}
 
-In order to analyse QUIC as a transport layer protocol for IoT, we have identified the following requirements using a MoSCoW style analysis:
+QUIC theoretically presents benefits in terms of faster connection times and resilience to packet loss.
+IoT devices that save energy by turning themselves off or disconnecting from the network when they are unused can benefit from faster reconnection times.
+Additionally, higher resilience to packet loss can be beneficial for IoT deployments where many devices on data links may cause congestion.
+However, due to the introduction of streams and other features that provide these performance guarantees, QUIC is also a relatively complex protocol.
+Hence, we must analyse if this complexity translates into challenges for hardware constrained devices.
+
+As previously discussed, IoT devices often carry sensitive data; hence, we must also consider that communication should be safe and secure.
+This requirement leads us to two choices.
+Firstly, we only consider communication that happens over an encrypted channel, that is, a network connection secured by TLS.
+This also gives us a chance to test QUIC's claim of faster secure connections due to a less complex handshake.
+Secondly, we must consider the programming language that we use for the implementation.
+Modern systems programming is dominated by C; however, the weak type system of C leads to many vulnerabilities stemming from bad memory management and race conditions.
+This means that insecure firmware may be shipped from the manufacturer and deployed when an IoT system is installed.
+The issue of such bugs in systems languages has led to the creation of the Rust programming language, which uses an ownership memory management system to mitigate these bugs.
+However, Rust is a relatively new programming language and does not yet benefit from the years of optimisations and ecosystem support that C has.
+Rust also opts to use a dependency manager that packages external dependencies into the binary of the program, which may have an effect on the binary size of the implementation.
+Hence, it is still important to contrast Rust with other languages.
+
+We focus on the MQTT protocol as it is the most popular application layer protocol in the IoT space~\citep{tmobile_iot}.
+MQTT is also beneficial for the analysis due to it being lightweight and having a low code footprint.
+This means that the implementation of MQTT itself should not be a bottleneck for hardware constrained devices.
+Hence, with the high-level goal of analysing the viability of a safe implementation of QUIC as a transport layer protocol for IoT devices, we must create an implementation that can be used as a test bench for such an analysis.
+This implementation will be a QUIC-based implementation of the MQTT protocol in a safe programming language.
+
+We must then analyse the resulting implementation in terms of network performance and the constraints of IoT devices.
+For network performance, we must evaluate if the QUIC-based implementation is at least as performant as its TCP counterpart.
+In terms of hardware constraints, we have chosen to focus on the storage constrained in IoT devices.
+We focus specifically on storage as we predict that this is where our implementation will see the biggest challenge.
+The requirements of using TLS, as well as the relatively untested binary sizes produced by Rust, mean that the implementation could be too large to act as firmware for devices with extreme hardware constraints.
+
+Hence, from these high-level requirements, to analyse QUIC as a transport layer protocol for IoT, we have identified the following specific requirements using a MoSCoW style analysis:
 
 \begin{itemize}
     \item Must:

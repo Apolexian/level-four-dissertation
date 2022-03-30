@@ -24,33 +24,37 @@ This result can be attributed to the fact that QUIC's advantage comes in scenari
 QUIC should still theoretically connect faster due to its simpler handshake; however, the implementation may impose overhead that outweighs this.
 
 \begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{images/analysis_connection_time_home.png}
-    \caption{The time it took for the implementations to establish a secure connection in the IoT home scenario for each link.
-        We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
-    \label{fig:connect_time_home}
+    \begin{center}
+        \begin{subfigure}[b]{1\textwidth}
+            \includegraphics[width=1\linewidth]{images/analysis_connection_time_home.png}
+            \caption{The time it took for the implementations to establish a secure connection in the IoT home scenario for each link.}
+            \label{fig:connect_time_home}
+        \end{subfigure}
+        \vspace{1.5em}
+
+        \begin{subfigure}[b]{1\textwidth}
+            \includegraphics[width=1\linewidth]{images/analysis_connection_time_farm.png}
+            \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario for each link.}
+            \label{fig:connect_time_farm}
+        \end{subfigure}
+        \vspace{1.5em}
+
+        \begin{subfigure}[b]{1\textwidth}
+            \includegraphics[width=1\linewidth]{images/analysis_connection_time_synth.png}
+            \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario for each link.}
+            \label{fig:connect_time_synth}
+        \end{subfigure}
+
+        \caption{The time taken to establish a secure connection in their respective scenarios.
+            We can see that MQuicTT on average performs better than the base TCP implementation in scenarios with high packet loss, however, it also experiences higher variance.}
+        \label{fig:connection_time}
+    \end{center}
 \end{figure}
 
 On the other hand, in the printer farm scenario, as shown in Figure~\ref{fig:connect_time_farm}, we can see that $MQuicTT$, on average, establishes a connection faster than the base implementation.
 When accounting for variance, we can see that the performance advantage is approximately on the scale of a single round trip time.
 This is consistent with the assumption that QUIC can handle packet loss better than the base TCP implementation.
 That is, the QUIC implementation likely did not need to retransmit packets as much as the base implementation, hence establishing a quicker connection.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{images/analysis_connection_time_farm.png}
-    \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario for each link.
-        We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
-    \label{fig:connect_time_farm}
-\end{figure}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{images/analysis_connection_time_synth.png}
-    \caption{The time it took for the implementations to establish a secure connection in the printer farm scenario for each link.
-        We can see that MQuicTT experiences higher variance, but performs on par with the base implementation overall.}
-    \label{fig:connect_time_synth}
-\end{figure}
 
 This result is supported by the data obtained from the synthetic scenario shown in Figure~\ref{fig:connect_time_synth}.
 We can see that $MQuicTT$ again, on average, establishes a connection quicker than the base implementation.
