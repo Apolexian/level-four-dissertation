@@ -1,6 +1,6 @@
 \chapter{Analysis} \label{chapter:eval}
 
-This section presents the analysis results conducted using the previously described methodology.
+This section presents the analysis of the results that were collected.
 The analysis is broadly split into two stages: performance analysis and binary size analysis.
 The experiment design for the performance analysis can be found in Section~\ref{chap:net_sim}, and the experiment design for the binary analysis can be found in Section~\ref{sec:exp_bin}.
 The performance analysis is further split into a connection time analysis and a general transmission time analysis.
@@ -15,14 +15,14 @@ The performance analysis is further split into a connection time analysis and a 
 
 \subsection{Binary size experiment design} \label{sec:exp_bin}
 
-This section describes how we have conducted further analysis on the binary size of the QUIC protocol that underlines MQuicTT.
-The focus of this section is to see if the QUIC stack contributes a significant overhead to MQuicTT's binary size and how we can reduce this overhead.
-We expect that the QUIC stack will contribute to the majority of the size of MQuicTT as MQTT itself is designed to have a low code size overhead.
+This section describes how we have conducted further analysis on the binary size of the QUIC protocol that underlines $MQuicTT$.
+The focus of this section is to see if the QUIC stack contributes a significant overhead to $MQuicTT$'s binary size and how we can reduce this overhead.
+We expect that the QUIC stack will contribute to the majority of the size of $MQuicTT$ as MQTT itself is designed to have a low code size overhead.
 Additionally, we have conducted a similar analysis for the TLS library used and expect that it also contributes a significant amount to the resulting binary size.
 Hence, the first step of this part of the analysis will be to determine how much QUIC contributes to the binary size.
 
 In order to get a breakdown of the binary we have used the $cargo-bloat$~\footnote{cargo-bloat - \url{https://lib.rs/crates/cargo-bloat}} utility.
-The utility analyses the binary using custom ELF, DWARF and Mach-O parsers and disassembles the binary to look for references and links to anonymous data.
+This utility analyses the binary using custom ELF, DWARF and Mach-O parsers and disassembles the binary to look for references and links to anonymous data.
 Doing so creates a map of the binary that shows where every byte has a label attached to it.
 
 This utility provides the composition of a Rust binary. 

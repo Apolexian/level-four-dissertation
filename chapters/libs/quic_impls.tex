@@ -25,7 +25,7 @@ We have identified the following main methods by which QUIC implementations inco
 This different use of TLS presented a challenge in calculating the binary size of the QUIC servers and clients.
 
 \begin{table}[ht]
-    \caption{The identified QUIC implementations and their binary size footprint. The footprint has been split into a client and server footprint using a minimal reproducible example for each. We used each implementation to create an example client and server capable of sending and receiving QUIC packets and analysed the binary size. Where provided, we compared this to the given examples to ensure as little implementation bias as possible. However, this is still not a perfect estimate, and some variance due to implementation details may be present.}\label{tab:quics}
+    \caption{The identified QUIC implementations and their binary size footprint. The footprint has been split into a client and server footprints using a minimal reproducible example for each. We used each implementation to create an example client and server capable of sending and receiving QUIC packets and analysed the binary size. Where provided, we compared this to the given examples to ensure as little implementation bias as possible. However, this is still not a perfect estimate, and some variance due to implementation details may be present.}\label{tab:quics}
     %\tt 
     \rowcolors{2}{}{gray!3}
     \begin{tabular}{@{}lp{18mm}p{29mm}p{29mm}l@{}}
@@ -50,7 +50,7 @@ Additionally, in the case of $picoquic$, we have added the size of the $picotls$
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{images/quic_impls.png}
-    \caption{The sizes of the client and server footprints for the selected QUIC implementations. Notable, only Quiche produced a server binary with a smaller size than its corresponding client binary. It is hard to estimate the error margin for the data as this depends on implementation details in the example client and servers.}
+    \caption{The sizes of the client and server footprints for the selected QUIC implementations. Notably, only Quiche produced a server binary with a smaller size than its corresponding client binary. It is hard to estimate the error margin for the data as this depends on implementation details in the example client and servers.}
     \label{fig:quic_impls}
 \end{figure}
 
@@ -62,7 +62,7 @@ In the case of $quic-go$, this was the $crypto/tls$ package, and in the case of 
 We can also see that the Rust implementations are not drastically different in binary footprint size.
 
 Notably, although Go is described as memory safe, it does not opt for compile-time memory safety and instead uses the panic model.
-The panic model is another advantage of Rust compared to languages such as Go, as Rust provides these guarantees using a robust type system.
+The lack of the panic model is another advantage of Rust compared to languages such as Go, as Rust provides these guarantees using a robust type system.
 Between the two Rust implementations - Quinn and Quiche, we chose Quinn due to issues with the Quiche library.
 On the other hand, Quiche opts to make the user create a $mio$ event loop, which interfered with the $tokio$ runtime environment used in our chosen MQTT implementation discussed in the next section.
 In addition to this, we found that the Quinn API is easier to work with when creating the intermediate library discussed in Chapter~\ref{chapter:quic_socket}; for example, Quinn handles the QUIC handshake in the library and does not require the developer to create an event loop.

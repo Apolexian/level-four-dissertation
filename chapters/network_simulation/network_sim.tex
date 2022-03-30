@@ -1,13 +1,13 @@
 \subsection{Network performance experiment design} \label{chap:net_sim}
 
 We now discuss the analysis methodology for the performance portion of the implementation evaluation.
-That is, this section focuses on evaluating MQuicTT against the base $rumqtt$ implementation.
+That is, this section focuses on evaluating $MQuicTT$ against the base $rumqtt$ implementation.
 
 The critical consideration for this design is the scenarios in which IoT devices are used.
 When evaluating the network performance of the implementations, we considered two options: using real IoT devices or using a network simulation tool.
+
 Due to technical limitations that came with using real devices, such as not being able to access the router of our network, we opted for simulation.
 In this section, we will discuss how we used Mininet~\citep{lantz_mininet_2021}, a realistic virtual network, in our evaluation.
-
 Mininet is a tool that network developers and researchers can use to create software-defined networks (SDNs) using the $OpenFlow$ standard.
 
 \begin{figure}[ht]
@@ -108,7 +108,7 @@ If the protocol performs well for an extreme scenario, we can expect it to also 
     \end{tabular}
 \end{table}
 
-We evaluate MQuicTT's performance using the presented topologies and respective simulation parameters in the following way.
+We evaluate $MQuicTT$'s performance using the presented topologies and respective simulation parameters in the following way.
 Each protocol transmits 100 messages from a client to a broker for each data link.
 
 During this, we measure the following:

@@ -19,7 +19,7 @@ Both of these interfaces use a $tcpstream$ to send and receive data.
 The $tcpstream$ is opened when the struct is initialised and closed when the MQTT connection ends.
 As TCP is a stateful protocol, minimal connection handling occurs after opening the initial stream.
 
-\begin{lstlisting}[language=Rust, caption={An example of initialising an MQuicTT client. The QUIC connection is established by initialising a $QuicClient$ and the resulting client is passed as an MQTT option.}, label=lst:MQuicTT:client]
+\begin{lstlisting}[language=Rust, caption={An example of initialising an $MQuicTT$ client. The QUIC connection is established by initialising a $QuicClient$ and the resulting client is passed as an MQTT option.}, label=lst:MQuicTT:client]
     #[tokio::main(worker_threads = 1)]
     async fn main() {
         ...
@@ -49,7 +49,7 @@ In the case of a broker, we must wait for a client to send a connection request.
 Hence, we may initialise the broker and wait for a QUIC connection, only allowing data transfer when any connection is established.
 This also means that the broker does not need to track which connection comes from which client.
 
-\begin{lstlisting}[language=Rust, caption={An example of initialising an MQuicTT broker. We can see that no operations with $QuiSocket$ are required for this initialisation as all QUIC operations are handled internally.}, label=lst:MQuicTT:broker]
+\begin{lstlisting}[language=Rust, caption={An example of initialising an MQuicTT broker. We can see that no operations with $QuicSocket$ are required for this initialisation as all QUIC operations are handled internally.}, label=lst:MQuicTT:broker]
     fn main() {
         pretty_env_logger::init();
         let config: Config = confy::load_path("rumqttd.conf").unwrap();
@@ -71,7 +71,7 @@ This would mean that the API for creating a client and broker would be identical
 However, we decided not to go with this approach because $rumqttc$ and $rumqttd$ would no longer be disjoint, independent components.
 With the chosen approach, it is possible to use different underlying transport protocols for either side, which allows for flexibility in implementation.
 
-Another avenue of discussion stems from $rumqtt$ having two different client implementations: an asynchronous client and an asynchronous client.
+Another avenue of discussion stems from $rumqtt$ having two different client implementations: a synchronous client and an asynchronous client.
 In either case, a $tokio$ eventloop is used to handle events.
 As $QuicSocket$ requires an asynchronous environment, the natural choice was to use the asynchronous client.
 It could, however, be possible to handle asynchronous events more efficiently by tying the QUIC eventloop to the MQTT eventloop as in the approach described by~\cite{kumar_implementation_2019}.

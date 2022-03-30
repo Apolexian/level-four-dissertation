@@ -15,7 +15,7 @@ In contrast to HTTP, CoAP relies on datagram-oriented UDP communication as its t
 The abstraction that CoAP provides is a UDP layer that deals with asynchrony and a request/response layer that specifies interactions.
 The header structure for CoAP and MQTT is very similar, with the significant difference being that MQTT needs an ordered reliable packet delivery mechanism.
 In the past, this restricted MQTT to the TCP/TLS stack; however, with the introduction of QUIC, we can see further similarities between CoAP and MQTT using QUIC with both protocols providing data transfer using UDP.
-A report on the active deployment of data transport protocols~\cite{tmobile_iot} showed that $62.61\%$ of deployments rely on MQTT as one of their protocols.
+A report on the active deployment of data transport protocols~\citep{tmobile_iot} showed that $62.61\%$ of deployments rely on MQTT as one of their protocols.
 In contrast, CoAP was the most widely used UDP based protocol, with $22.49\%$ of deployments relying on it as one of their protocols.
 This is partly because the class of constrained devices that CoAP targets does not cover the entire range of constrained IoT devices.
 The authors show that MQTT is more suitable for less constrained devices with long-standing connections; however, it may not be suitable for relatively more constrained devices.

@@ -5,7 +5,7 @@ To do so, we have used the previously described methodology.
 That is, we have transmitted the MQTT messages shown in~\ref{appendix:mqtt_message} for their respective scenario and have measured the total time taken for the transmission to occur.
 
 Figure~\ref{fig:comm_time_home} shows the results for the data transmission in the IoT home scenario.
-We can see that MQuicTT performs comparably to the base $rumqtt$ implementation.
+We can see that $MQuicTT$ performs comparably to the base $rumqtt$ implementation.
 $MQuicTT$ performs better in the cases of 3g, 4g and WiFi and loses out to the base implementation in Zigbee and ethernet.
 The difference, however, is not substantial, and we can see from the variance that the implementations are comparable in performance.
 Notably, $MQuicTT$ experiences higher variance, implying that it is more affected by changes in the simulation environment between tests, while the base implementation is more consistent.

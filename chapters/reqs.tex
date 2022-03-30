@@ -32,7 +32,7 @@ This implementation will be a QUIC-based implementation of the MQTT protocol in 
 
 We must then analyse the resulting implementation in terms of network performance and the constraints of IoT devices.
 For network performance, we must evaluate if the QUIC-based implementation is at least as performant as its TCP counterpart.
-In terms of hardware constraints, we have chosen to focus on the storage constrained in IoT devices.
+In terms of hardware constraints, we have chosen to focus on the storage constraint in IoT devices.
 We focus specifically on storage as we predict that this is where our implementation will see the biggest challenge.
 The requirements of using TLS, as well as the relatively untested binary sizes produced by Rust, mean that the implementation could be too large to act as firmware for devices with extreme hardware constraints.
 
@@ -41,8 +41,8 @@ Hence, from these high-level requirements, to analyse QUIC as a transport layer 
 \begin{itemize}
     \item Must:
     \begin{itemize}
-        \item We \textbf{must} create a test case for MQTT using QUIC - MQuicTT.
-        \item We \textbf{must} analyse the performance of MQuicTT compared to base MQTT implementations.
+        \item We \textbf{must} create a test case for MQTT using QUIC - $MQuicTT$.
+        \item We \textbf{must} analyse the performance of $MQuicTT$ compared to base MQTT implementations.
         \item We \textbf{must} focus on realistic testing scenarios for evaluation.
     \end{itemize}
     \item Should:
@@ -78,10 +78,10 @@ From these requirements, we have split the project into the following objectives
 \begin{itemize}
     \item \textbf{O1}: Compare existing QUIC and MQTT implementations that can act as underlying libraries.
     \item \textbf{O2}: Create an abstraction layer for the QUIC specific logic.
-    \item \textbf{O3}: Implement MQuicTT by changing the underlying MQTT implementation to use this abstraction layer.
+    \item \textbf{O3}: Implement $MQuicTT$ by changing the underlying MQTT implementation to use this abstraction layer.
     \item \textbf{O4}: Create a test bench for the network performance analysis of MQuicTT.
     \item \textbf{O5}: Devise a methodology for trimming down the QUIC stack in terms of binary size.
-    \item \textbf{O6}: Analyse the components of the MQuicTT binary.
+    \item \textbf{O6}: Analyse the components of the $MQuicTT$ binary.
 \end{itemize}
 
 \textbf{O1} focuses on finding implementations that can be used as the underlying libraries for $MQuicTT$.
@@ -103,7 +103,7 @@ The rest of the objectives are addressed in Chapter~\ref{chapter:eval}.
 
 \section{Design of the implementation}
 
-In this section, we present a comparison of existing QUIC and MQTT implementations that can be used as underlying libraries for MQuicTT.Additionally, we discuss the high-level design of MQuicTT and the approach we have taken when it comes to using existing libraries compared to creating new protocol implementations.
+In this section, we present a comparison of existing QUIC and MQTT implementations that can be used as underlying libraries for $MQuicTT$. Additionally, we discuss the high-level design of $MQuicTT$ and the approach we have taken when it comes to using existing libraries compared to creating new protocol implementations.
 
 \section{Overall MQuicTT design} \label{sec:mquictt_design}
 
@@ -121,7 +121,7 @@ By creating this intermediate library and ensuring that its API mimics a standar
 Additionally, this library can be used for any application that uses the QUIC protocol.
 The key consideration when creating this abstraction is how we want to use QUIC streams.
 
-To recap, QUIC streams are an encapsulation around the data transfer portion of the QUIC protocol.
+To recall, QUIC streams are an encapsulation around the data transfer portion of the QUIC protocol.
 After establishing a connection, QUIC opens streams in order to send and receive data.
 There can be an arbitrary number of streams on a single UDP connection using QUIC.
 Hence, QUIC provides advantages by removing head-of-line blocking as different logical separations of data can be sent on different streams.

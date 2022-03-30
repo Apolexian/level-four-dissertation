@@ -10,6 +10,6 @@ Other available implementations supported only one side of the MQTT protocol or 
 $Rumqtt$ provides to components for an MQTT application - $rumqttc$ and $rumqttd$.
 The former can be used to create an MQTT client, and the latter a broker.
 However, the code base for these is somewhat similar, easing the incorporation of QUIC.
-Both components provide an interface for supporting asynchronous communication using a $tokio$ runtime, which fits nicely into our choice of QUIC implementation as $Quinn$ requires a $tokio$ environment.
+Both components provide an interface for supporting asynchronous communication using a $tokio$ runtime, which is suitable for our choice of QUIC implementation as $Quinn$ requires a $tokio$ environment.
 By default, $rumqtt$ uses TCP as its transport layer protocol and TLS through $rustls$.
 All underlying implementation assumptions remain equal because this is the same library as $Quinn$ uses.

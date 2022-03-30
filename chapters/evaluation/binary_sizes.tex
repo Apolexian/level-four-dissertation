@@ -13,7 +13,7 @@ Figure~\ref{fig:mquictt_client_bin} shows the result of the binary breakdown by 
 When analysing the QUIC stack contribution to the binary size, we can see that $quinn$ contributes to $17.8\%$ of the binary size and $rustls$ contributes a further $12.6\%$.
 Additionally, we can see that the $ring$ crate contributes another $5.8\%$.
 This crate is a Rust binding for BoringSSL primitives; hence it is part of the TLS implementation.
-Overall, this means that the QUIC stack constitutes $36.2\%$ of MQuicTT's client binary size.
+Overall, this means that the QUIC stack constitutes $36.2\%$ of $MQuicTT$'s client binary size.
 This result is in line with our prediction that the QUIC stack will contribute the most to the binary size.
 
 Unexpectedly, however, the $regex$ crate contributes $14.3\%$ to the size of the client binary exceeding even the contribution made by the TLS implementation.
@@ -30,7 +30,7 @@ We have found over 40 crates that contributed to this, including data structure 
 Notably, we have found that logging utilities and error reporting do not largely contribute to the size of the client's binary.
 This comes in contrast to one of the steps in reducing the binary size taken by~\cite{eggert_towards_2020}.
 
-Figure~\ref{fig:mquictt_broker_bin} shows similar results for MQuicTT's broker.
+Figure~\ref{fig:mquictt_broker_bin} shows similar results for $MQuicTT$'s broker.
 We can see that in the case of the broker, the QUIC stack constitutes $32.9\%$ of the binary size.
 Similarly to the client, the $regex$ crate again shows a large binary size footprint, and the lesser crates contribute to a sizeable cumulative amount.
 Additionally, similarly to the results presented for the client, we have found that the logging and error checking crates have not contributed largely to the binary size.
@@ -38,13 +38,11 @@ Additionally, similarly to the results presented for the client, we have found t
 \begin{figure}[ht]
     \centering
     \includegraphics[width=1\linewidth]{images/mquictt_binary_broker.png}
-    \caption{Top contributions to the binary size of the MQuicTT broker by crate. That is, which libraries contribute the largest footprint.}
+    \caption{Top contributions to the binary size of the $MQuicTT$ broker by crate. That is, which libraries contribute the largest footprint.}
     \label{fig:mquictt_broker_bin}
 \end{figure}
 
-We have further analysed the binary to see which methods contribute to the size for the client and broker.
-Notably, in both cases, the $quinn\_proto$ module of $quinn$ contains several methods such as $connection::Connection::process\_payload$ and $endpoint::Endpoint::handle$ that each contribute around $0.8\%$.
-Notably, however, the $regex::exec::ExecBuilder::build$ method from the $regex$ crate contributes $0.7\%$, which is a larger contribution than $quinn's$ methods for decrypting packets and polling for connections.
+Notably, the $regex::exec::ExecBuilder::build$ method from the $regex$ crate contributes $0.7\%$, which is a larger contribution than $quinn's$ methods for decrypting packets and polling for connections.
 
 \begin{figure}
     \begin{center}
@@ -59,14 +57,14 @@ Notably, however, the $regex::exec::ExecBuilder::build$ method from the $regex$ 
             \label{fig:reduce_roker}
         \end{subfigure}
         \caption{The stages of the reduction and the sizes of the QUIC binary at the corresponding stages. Subfigure~\ref{fig:reduce_client} shows the reduction in the binary size of the client and Subfigure~\ref{fig:reduce_roker} shows similar results for the binary size of the broker.
-        Compiling in 32-bit only bode results in the highest decrease in binary size.}
+        Compiling in 32-bit only mode results in the highest decrease in binary size.}
         \label{fig:reduce}
     \end{center}
 \end{figure}
 
 \subsection{Reducing the QUIC stack}
 
-As we can see from the composition of the binaries of MQuicTT, the QUIC stack is around a third of the size of the implementation.
+As we can see from the composition of the binaries of $MQuicTT$, the QUIC stack is around a third of the size of the implementation.
 Hence, we now analyse methods for reducing QUIC's contribution following the previously described methodology.
 
 Figure~\ref{fig:reduce} demonstrates the reduction in binary size at each stage described in the methodology.
@@ -76,7 +74,7 @@ However, the two remaining stages did not contribute significantly to the reduct
 This can perhaps be attributed to implementation details as the reduction due to error handling and standard output use would be directly proportional to their use in the codebase.
 This is further reinforced by the client being reduced by a higher percentage from removing error handling due to the client's source code having more of this feature.
 
-Hence, from the binary analysis conducted, we can see that the QUIC stack contributes a significant amount to the overall binary size of MQuicTT.
+Hence, from the binary analysis conducted, we can see that the QUIC stack contributes a significant amount to the overall binary size of $MQuicTT$.
 We can also see that reducing the size of the QUIC stack is not trivial, with the best results coming from compiling to a 32-bit only target.
 
 Another avenue to reduce the binary size is to look at which features of QUIC and TLS contribute most to the binary size.
@@ -99,7 +97,7 @@ There are two possible ways to estimate this that we considered.
 Firstly, we could look at the number of lines of code and draw some conclusions from this.
 However, lines of code do not correspond to binary size well at all; hence, this option was rejected.
 Secondly, we could re-write the $Quinn$ implementation with better abstractions, isolating each feature.
-However, this is the ideal solution was unfortunately out of scope for this project.
+However, despite this being the ideal solution, it was unfortunately out of scope for this project.
 
 From the features that were extracted successfully, we can see that 0-RTT contributes $5\%$ or $12.2Kb$.
 0-RTT connection re-establishment, however, as discussed previously, can be seen as a favourable feature for IoT devices due to its ability to reduce connection time.

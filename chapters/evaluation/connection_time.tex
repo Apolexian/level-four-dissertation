@@ -13,7 +13,7 @@ In an MQTT/TCP implementation, the standard way to extend the keep alive interva
 However, it has been shown that this method can lead to security vulnerabilities~\citep{vaccari_slowtt_2020,mileva_comprehensive_2021}.
 
 To measure the connection time, we have followed the previously described methodology.
-That is, we began a communication via MQuicTT and the other MQTT implementations and captured it using $tcpdump$.
+That is, we began a communication via $MQuicTT$ and the other MQTT implementations and captured it using $tcpdump$.
 We have then extracted the time between the start of the QUIC or TCP communication and the handshake completion.
 
 Figure~\ref{fig:connect_time_home} shows the results for the IoT home scenario.
@@ -46,7 +46,7 @@ QUIC should still theoretically connect faster due to its simpler handshake; how
         \end{subfigure}
 
         \caption{The time taken to establish a secure connection in their respective scenarios.
-            We can see that MQuicTT on average performs better than the base TCP implementation in scenarios with high packet loss, however, it also experiences higher variance.}
+            We can see that $MQuicTT$ on average performs better than the base TCP implementation in scenarios with high packet loss, however, it also experiences higher variance.}
         \label{fig:connection_time}
     \end{center}
 \end{figure}
