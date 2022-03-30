@@ -1,9 +1,10 @@
 \begin{abstract}
-    New advances in networked systems and programming languages are set to succeed existing industry standards.
+    IoT devices are becoming the largest form of computation and require high network performance, while also presenting hardware constraints due to their form factor.
+    New advances in networked systems and programming languages are set to succeed existing industry standards and could prove to be beneficial for IoT devices.
     In the transport layer space, QUIC is set to supersede the TCP/TLS stack and is advantageous for performance and security by leveraging improved features such as a more straightforward, secure handshake and streams.
     While in the programming languages space, Rust, a new systems programming language, uses a strong type system to guarantee memory-safety and deadlock-freedom while still being performant.
     In this work, we analyse the feasibility of using a Rust based QUIC implementation as the basis for secure communication in IoT devices.
-    To do so, in this work, we develop $MQuicTT$ - a Rust based MQTT implementation using QUIC at the transport layer.
+    To do so, we develop $MQuicTT$ - a Rust based MQTT implementation using QUIC at the transport layer.
     We compare the performance of the resulting solution with existing MQTT implementations in various use cases and analyse the hardware resources needed to deploy it.
     We find that the performance of the implementation is on par with the baseline.
     Finally, we discuss the binary size of the implementation and the possible methods to generally reduce Rust binary sizes for IoT network firmware using QUIC.

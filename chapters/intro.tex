@@ -7,7 +7,8 @@ The Internet of Things (IoT) is rapidly becoming the most prominent form of comp
 IoT devices range from daily consumer gadgets such as wearables to sensors that are used in smart factories.
 The central theme of these devices is network connectivity.
 Network firmware installed on these devices has to be performant enough to send and receive massive amounts of data. 
-Hence, the need for efficient, lightweight network firmware often means that manufacturers of these devices forego security for performance~\cite{ling_iot_2018}.
+Hence, the need for efficient, lightweight network firmware.
+The constraints presented by these devices, however, often mean that manufacturers of these devices forego security for performance~\cite{ling_iot_2018}.
 Therefore, the mass use of devices that are manufactured without security in mind creates a situation where many devices that are critical to infrastructure become vulnerable to cyber attacks, as seen in the 2015 attack on the Ukraine power grid~\citep{Liang2017}.
 However, we can not just employ the usual methods to secure firmware on these devices due to the presented constraints in terms of their physical size, power consumption needs and available hardware resources.
 Hence, there is a need to develop protocols for secure, performant communication for IoT devices.
@@ -19,7 +20,7 @@ Significantly, MQTT relies on a transport layer protocol to send data and ensure
 The standard in current MQTT implementations is to use TLS to provide secure data transfer.
 As we present in this work, this adds overhead, which means that the advantages of MQTT are negated if we need secure communication.
 
-There have recently been several developments in systems software that aim to succeed in existing industry standards.
+There have recently been several developments in systems software that aim to succeed existing industry standards.
 QUIC~\citep{iyengar_quic_2021}, a new transport layer network protocol initially designed at Google, is set to succeed TCP with a number of improvements.
 QUIC boasts advantages in both secure communication and performance by eliminating several overheads of TCP such as head of line blocking and requiring a much simpler handshake to establish a secure connection.
 In addition to this, the Rust programming language is a memory-safe systems programming language that aims to succeed C.
